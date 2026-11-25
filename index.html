@@ -1,0 +1,1184 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b0a0e">
+<title>Grimoire de Corroded</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Guide fan du Corroded Decontamination Facility (Aion 2) : Klawfly, Blatt et Bargott, chaque attaque et mécanique avec clips du jeu, schémas et arène 3D animée.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya+SC:wght@500;700;800&family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: dark "grimoire" read next to the game. Topbar + boss HP, art hero, raid route, live 3D arena with game-clip compare, then per boss: attacks grid + HP-ordered mechanics timeline with sticky rules. */
+:root{
+  --bg:#0b0a0e;--surface:#15131a;--surface2:#1f1c25;--line:#2e2a35;
+  --ink:#ece5d7;--muted:#a39b8f;--soul:#8fd3bf;--gold:#d4a85a;--blood:#dc5841;
+  --kd:#f2cf3c;--safe:#3fd77a;--m-death:#ff3b3b;--orb-r:#ff5a4a;--orb-b:#4aa8ff;--void:#a35cff;
+  --f-display:"Alegreya SC","Palatino Linotype",Georgia,serif;
+  --f-body:"Golos Text","Segoe UI",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:12px;--navh:56px;color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--navh) + 12px)}
+html,body{background:var(--bg)}
+body{color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;margin:0;overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+a{color:var(--soul)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,figure:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--f-display);font-weight:700;letter-spacing:.01em;text-wrap:balance;margin:0}
+h2{font-size:clamp(1.9rem,4.6vw,3.1rem);line-height:1.02;font-weight:800}
+h3{font-size:1.18rem}
+p{margin:0}
+.kicker{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.ko{font-family:var(--f-body);color:var(--muted);font-size:.6em;font-weight:400;letter-spacing:0}
+.num{font-variant-numeric:tabular-nums;font-family:var(--f-mono)}
+.ambient{position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 70% at 50% 110%,rgba(110,90,150,.10),transparent 60%),radial-gradient(90% 60% at 10% 0%,rgba(74,168,255,.05),transparent 60%),var(--bg)}
+.cursor-glow{position:fixed;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(167,127,228,.10),rgba(74,168,255,.05) 35%,transparent 65%);transform:translate(-999px,-999px);mix-blend-mode:screen}
+
+/* topbar */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:51;background:var(--bg)}
+.topbar{position:fixed;left:0;right:0;top:0;z-index:50;padding-top:env(safe-area-inset-top,0px);background:color-mix(in srgb,var(--bg) 70%,transparent);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent)}
+.topbar .row{display:flex;align-items:center;gap:12px;height:var(--navh)}
+.brand{font:800 1.05rem var(--f-display);white-space:nowrap;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:8px}
+.brand svg{width:22px;height:22px}
+.nav{display:flex;gap:2px;overflow-x:auto;flex:1;min-width:0;scrollbar-width:none;mask-image:linear-gradient(90deg,#000 88%,transparent);-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent)}
+.nav::-webkit-scrollbar{display:none}
+.nav a{font:600 .82rem var(--f-body);color:var(--muted);text-decoration:none;padding:7px 10px;border-radius:7px;white-space:nowrap;transition:color .2s,background .2s}
+.nav a:hover{color:var(--ink)}
+.nav a.cur{color:var(--ink);background:var(--surface2)}
+.vid-link{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;font:600 .8rem var(--f-body);color:#f0d9a6;text-decoration:none;padding:6px 12px;border:1px solid color-mix(in srgb,var(--gold) 55%,var(--line));border-radius:999px;background:linear-gradient(180deg,color-mix(in srgb,#d4a85a 22%,transparent),color-mix(in srgb,#d4a85a 8%,transparent));box-shadow:0 0 14px -6px rgba(212,168,90,.7);white-space:nowrap;transition:transform .2s,box-shadow .2s}
+.vid-link:hover{box-shadow:0 0 18px -4px rgba(212,168,90,.85);transform:translateY(-1px)}
+.bosshp{position:relative;height:5px;background:#24080a}
+.bosshp i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#7a1b12,var(--blood) 60%,#ff8d6b);box-shadow:0 0 12px var(--blood);transition:width .15s linear}
+.bosshp b{position:absolute;right:max(16px,env(safe-area-inset-right,0px));top:7px;font:600 .66rem var(--f-mono);color:var(--blood);letter-spacing:.08em;text-shadow:0 1px 3px #000}
+
+/* hero */
+.hero{position:relative;min-height:min(92vh,820px);overflow:hidden;isolation:isolate;display:grid;align-items:end;background:#08070c}
+.hero-art{position:absolute;inset:0;z-index:-3}
+.hero-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 30%;filter:saturate(1.05) contrast(1.05);transform:scale(1.04);animation:drift 24s ease-in-out infinite alternate}
+@keyframes drift{to{transform:scale(1.1) translate(-1.5%,1%)}}
+#heroCv{position:absolute;inset:0;width:100%;height:100%;z-index:-2;display:block}
+.hero-shade{position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(8,8,12,.94) 0%,rgba(8,8,12,.7) 34%,rgba(8,8,12,.1) 66%),linear-gradient(180deg,rgba(11,10,14,.35),transparent 30%,transparent 62%,var(--bg) 99%)}
+.hero-in{padding-block:calc(var(--navh) + 60px) 56px;display:grid;gap:18px;position:relative;z-index:1;width:100%}
+.hero-in>*{max-width:min(100%,640px)}
+.eyebrow{display:flex;flex-wrap:wrap;gap:8px}
+.eyebrow span{font:600 .7rem var(--f-mono);letter-spacing:.14em;text-transform:uppercase;padding:5px 9px;border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:999px;color:var(--gold);background:color-mix(in srgb,var(--bg) 55%,transparent)}
+.title{font-size:clamp(4rem,14vw,10rem);line-height:.84;font-weight:800;letter-spacing:-.01em;color:#f3e7cf;filter:drop-shadow(0 6px 30px rgba(163,92,255,.35))}
+.title .ch{display:inline-block;background:linear-gradient(180deg,#fff7e6 0%,#ead7ae 45%,#a87a35 100%);-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise 1.2s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--i) * 70ms + .15s)}
+@keyframes rise{from{transform:translateY(.35em) rotateX(60deg);filter:blur(10px);opacity:.15}to{transform:none;filter:none;opacity:1}}
+.subtitle{font:700 clamp(1.1rem,2.6vw,1.7rem) var(--f-display);color:var(--ink);letter-spacing:.04em;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline}
+.subtitle small{font:500 .9rem var(--f-body);color:var(--muted);letter-spacing:0}
+.hero-copy{max-width:54ch;color:#d4ccbd;font-size:1.02rem;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.cta{display:flex;flex-wrap:wrap;gap:10px}
+.btn{font:600 .88rem var(--f-body);color:var(--ink);background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:9px 14px;cursor:pointer;display:inline-flex;gap:7px;align-items:center;white-space:nowrap;text-decoration:none;transition:border-color .2s,transform .2s,box-shadow .2s,background .2s}
+.btn:hover{border-color:var(--muted)}
+.btn.on{background:var(--gold);color:#1a140a;border-color:var(--gold)}
+.btn.sm{padding:5px 9px;font-size:.78rem}
+.btn.prime{background:linear-gradient(180deg,#e6c27c,#b4852f);color:#1a1206;border-color:#e6c27c;box-shadow:0 10px 30px -10px rgba(212,168,90,.6)}
+.btn.prime:hover{transform:translateY(-2px);box-shadow:0 0 0 6px rgba(212,168,90,.12),0 14px 34px -10px rgba(212,168,90,.7)}
+.btn.ghost{background:color-mix(in srgb,var(--bg) 55%,transparent)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:color-mix(in srgb,var(--line) 80%,transparent);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.stats div{background:color-mix(in srgb,var(--bg) 78%,transparent);padding:10px 12px;display:grid;gap:1px;min-width:0}
+.stats b{font:600 1.15rem var(--f-mono);font-variant-numeric:tabular-nums}
+.stats span{font-size:.66rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.credit-hero{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:12px;font:500 .66rem var(--f-mono);color:rgba(236,229,215,.5)}
+
+.marquee{border-block:1px solid var(--line);overflow:hidden;background:linear-gradient(90deg,var(--bg),var(--surface),var(--bg));padding-block:12px}
+.marquee .track{display:flex;gap:34px;width:max-content;animation:mq 70s linear infinite}
+.marquee span{font:700 1.05rem var(--f-display);color:color-mix(in srgb,var(--ink) 70%,transparent);white-space:nowrap}
+.marquee span em{font:500 .8rem var(--f-body);font-style:normal;color:var(--gold);margin-left:8px}
+.marquee span::after{content:"✦";color:var(--blood);margin-left:34px;font-size:.7rem;vertical-align:middle}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+main{display:grid;grid-template-columns:minmax(0,1fr);position:relative;z-index:1}
+.chapter{padding-block:80px 24px;position:relative;min-width:0}
+.chapter-head{display:grid;gap:10px;margin-bottom:26px;max-width:820px}
+.chapter-head .kicker{color:var(--gold)}
+.chapter-head h2{background:linear-gradient(180deg,#fff6e4,#d9c49b);-webkit-background-clip:text;background-clip:text;color:transparent}
+.chapter-head h2 .ko{-webkit-text-fill-color:var(--muted)}
+.lead{max-width:68ch;color:var(--muted);font-size:1rem}
+.sec{display:grid;gap:14px;margin-bottom:34px;min-width:0}
+.sec-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sec-h h3{font-size:1.45rem}
+.sec-h span{font:600 .7rem var(--f-mono);letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.note{font-size:.84rem;color:var(--muted);max-width:80ch}
+
+/* route */
+.route{display:grid;gap:14px;grid-template-columns:repeat(4,minmax(0,1fr))}
+.portal{position:relative;border-radius:18px;padding:18px;min-height:300px;display:grid;align-content:end;gap:8px;overflow:hidden;border:1px solid var(--line);background:var(--surface);transition:border-color .3s,transform .3s;min-width:0}
+.portal:hover{border-color:color-mix(in srgb,var(--pa) 60%,var(--line));transform:translateY(-3px)}
+.portal .art{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;opacity:.75;transition:transform .8s,opacity .3s}
+.portal:hover .art{transform:scale(1.05);opacity:.95}
+.portal::after{content:"";position:absolute;inset:0;z-index:0;background:linear-gradient(180deg,transparent 15%,rgba(11,10,14,.7) 50%,var(--bg) 92%);pointer-events:none}
+.portal>:not(.art){position:relative;z-index:1}
+.portal[data-p="rahu"]{--pa:#dc5841}.portal[data-p="ketu"]{--pa:#4aa8ff}.portal[data-p="p1"]{--pa:#a35cff}.portal[data-p="p2"]{--pa:#d4a85a}
+.portal .gtag{font:600 .66rem var(--f-mono);letter-spacing:.14em;color:var(--pa);text-transform:uppercase}
+.portal h3{font-size:clamp(1.4rem,2.4vw,1.8rem);line-height:1;font-weight:800}
+.threats{display:grid;gap:3px;font-size:.84rem;color:#d6cdbd;margin:0;padding:0;list-style:none}
+.threats li::before{content:"✕ ";color:var(--blood);font-weight:700}
+.portal .btn{justify-self:start}
+
+/* arena */
+.stage{position:relative;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#0d0b10;box-shadow:0 30px 80px -40px rgba(163,92,255,.35)}
+.stage:fullscreen{border-radius:0}
+#arena{display:block;width:100%;height:clamp(380px,70vh,680px);touch-action:none;cursor:grab}
+.stage:fullscreen #arena{height:100vh}
+#arena:active{cursor:grabbing}
+.hud{position:absolute;left:12px;right:12px;top:10px;display:flex;justify-content:space-between;gap:8px;pointer-events:none;flex-wrap:wrap}
+.hud-title{background:color-mix(in srgb,var(--bg) 78%,transparent);border:1px solid var(--line);border-radius:8px;padding:6px 10px;max-width:60%;min-width:0}
+.hud-title b{font-family:var(--f-display);font-size:1.05rem;display:block;line-height:1.15}
+.hud-title span{font-size:.75rem;color:var(--muted)}
+.seg{display:flex;gap:2px;background:color-mix(in srgb,var(--bg) 70%,transparent);border:1px solid var(--line);border-radius:9px;padding:2px;pointer-events:auto;align-self:flex-start}
+.seg .btn{border:0;background:transparent}
+.seg .btn.on{background:var(--gold);color:#1a140a}
+.gauge{position:absolute;left:12px;right:12px;bottom:10px;pointer-events:none}
+.gauge-bar{height:8px;border-radius:4px;background:var(--surface2);border:1px solid var(--line);overflow:hidden}
+.gauge-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blood),var(--kd));width:0;transition:width .15s}
+.gauge small{display:block;margin-bottom:3px;color:var(--ink);text-shadow:0 1px 2px #000;font-family:var(--f-mono);font-size:.72rem}
+.caption{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);width:max-content;max-width:min(92%,640px);text-align:center;background:color-mix(in srgb,var(--bg) 84%,transparent);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:.9rem;pointer-events:none}
+.cmp{position:absolute;right:12px;top:58px;width:min(38%,380px);background:color-mix(in srgb,var(--bg) 90%,transparent);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.cmp-h{display:flex;justify-content:space-between;align-items:center;padding:4px 8px;font-size:.78rem;gap:8px}
+.cmp-h small{color:var(--muted);font-size:.66rem}
+.cmp video{display:block;width:100%;aspect-ratio:16/9;background:#000;object-fit:cover}
+.x{background:none;border:0;color:var(--muted);font-size:1.1rem;cursor:pointer;line-height:1;padding:2px 4px}
+.ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding-top:12px}
+.ctrl input[type=range]{flex:1 1 160px;min-width:0;accent-color:var(--gold)}
+.ctrl select{background:var(--surface2);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:5px 9px;font:600 .78rem var(--f-body)}
+.tg{display:inline-flex;gap:6px;align-items:center;font-size:.82rem;color:var(--muted)}
+.tg input{accent-color:var(--gold)}
+.chip-group{display:grid;gap:12px;margin-top:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr))}
+.chips{display:flex;flex-wrap:wrap;gap:6px;align-content:start;min-width:0}
+.chips h4{flex-basis:100%;margin:0 0 2px;font:600 .7rem var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--cc)}
+.chip{font:600 .78rem var(--f-body);color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 11px;cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+.chip:hover{color:var(--ink);border-color:var(--muted)}
+.chip.on{color:var(--bg);background:var(--cc);border-color:var(--cc)}
+.chips[data-b="rahu"]{--cc:#ff8d6b}.chips[data-b="ketu"]{--cc:#6fbaff}.chips[data-b="p1"]{--cc:#b98cff}.chips[data-b="p2"]{--cc:#e6c27c}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:.78rem;color:var(--muted);padding-block:12px 2px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:5px}
+.legend .keys{flex-basis:100%;font-family:var(--f-mono);font-size:.7rem;opacity:.8}
+.steps{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:4px;font-size:.86rem;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr))}
+.steps li{display:grid;grid-template-columns:48px 1fr;gap:8px;padding:5px 8px;border-radius:6px;color:var(--muted);cursor:pointer;border:1px solid transparent}
+.steps li.cur{background:var(--surface2);color:var(--ink);border-color:var(--line)}
+.steps li .num{color:var(--gold);font-size:.78rem}
+.nogl{display:grid;place-items:center;height:clamp(380px,70vh,680px);color:var(--muted);padding:24px;text-align:center}
+
+/* clips */
+.clip{position:relative;margin:0;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:16/9;cursor:pointer;max-width:100%}
+.clip img,.clip video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.clip img{transition:transform .5s,filter .3s;filter:brightness(.85)}
+.clip:hover img{transform:scale(1.04);filter:brightness(1)}
+.clip .pb{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 60%,transparent);border:1px solid color-mix(in srgb,var(--gold) 60%,transparent);color:var(--gold);font-size:1.1rem;box-shadow:0 0 24px -6px rgba(212,168,90,.7);transition:transform .2s}
+.clip:hover .pb{transform:scale(1.1)}
+.clip .src{position:absolute;right:6px;bottom:4px;font:500 .6rem var(--f-mono);color:rgba(236,229,215,.75);text-shadow:0 1px 2px #000}
+.clip.playing{cursor:default}
+.clip.playing .pb,.clip.playing .src{display:none}
+.diag{margin:0;display:grid;gap:5px;align-content:start}
+.diag img{width:100%;border-radius:10px;border:1px solid var(--line);background:#0e0c13;cursor:zoom-in;display:block}
+.diag figcaption{font-size:.74rem;color:var(--muted)}
+
+/* attacks grid */
+.atks{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.atk{background:color-mix(in srgb,var(--surface) 92%,transparent);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:8px;align-content:start;min-width:0}
+.atk h4{font-size:1.08rem;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.atk h4 small{font:600 .66rem var(--f-mono);color:var(--gold);letter-spacing:.1em}
+.atk p{color:#cfc6b6;font-size:.9rem}
+.tip,.warn{font-size:.85rem;border-left:2px solid var(--safe);padding-left:8px;color:#d9eadf}
+.warn{border-color:var(--blood);color:#f0d6cf}
+.tip b,.warn b{font:600 .66rem var(--f-mono);letter-spacing:.1em;text-transform:uppercase;margin-right:6px}
+.tip b{color:var(--safe)}.warn b{color:var(--blood)}
+.acts{display:flex;gap:6px;flex-wrap:wrap}
+
+/* HP rail */
+.rail{position:relative;padding:34px 16px 22px;border:1px solid var(--line);border-radius:var(--r);background:color-mix(in srgb,var(--surface) 90%,transparent)}
+.rail-bar{position:relative;height:14px;border-radius:7px;background:linear-gradient(90deg,#5a120c,var(--blood) 50%,#ff8d6b);box-shadow:inset 0 0 0 1px rgba(0,0,0,.4),0 0 24px -6px var(--blood)}
+.rail-bar::after{content:"";position:absolute;inset:0;border-radius:7px;background:repeating-linear-gradient(90deg,transparent 0 calc(10% - 1px),rgba(0,0,0,.35) calc(10% - 1px) 10%)}
+.mk{position:absolute;top:50%;transform:translate(-50%,-50%);z-index:2;width:22px;height:22px;border-radius:50%;background:var(--bg);border:2px solid var(--gold);cursor:pointer;padding:0;transition:transform .2s,box-shadow .2s}
+.mk:hover{transform:translate(-50%,-50%) scale(1.25);box-shadow:0 0 0 6px color-mix(in srgb,var(--gold) 20%,transparent),0 0 18px var(--gold)}
+.mk span{position:absolute;left:50%;transform:translateX(-50%);top:-28px;font:600 .72rem var(--f-mono);color:var(--gold);white-space:nowrap}
+.mk.lo span{top:24px}
+.mk.end span{left:auto;right:-6px;transform:none}.mk.start span{left:-6px;transform:none}
+.rail{overflow:hidden}
+.rail-ends{display:flex;justify-content:space-between;font:600 .68rem var(--f-mono);color:var(--muted);margin-top:22px;letter-spacing:.08em}
+
+/* mechanics timeline */
+.glayout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:22px;align-items:start}
+.tl{position:relative;display:grid;gap:8px;padding-left:84px;min-width:0}
+.tl::before{content:"";position:absolute;left:66px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--gold),var(--blood))}
+.tl-item{position:relative;padding:12px 14px 14px;border-radius:12px;border:1px solid var(--line);background:color-mix(in srgb,var(--surface) 88%,transparent);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,300px);gap:14px;min-width:0}
+.tl-item:target{border-color:color-mix(in srgb,var(--gold) 60%,var(--line))}
+.tl-item::before{content:"";position:absolute;left:-24px;top:15px;width:10px;height:10px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.tl-bar{position:absolute;left:-88px;top:10px;width:56px;text-align:right;font:600 .8rem var(--f-mono);color:var(--gold)}
+.tl-txt{display:grid;gap:8px;align-content:start;min-width:0}
+.tl-item h3{font-size:1.12rem}
+.tl-item p,.tl-item li{color:#cfc6b6;font-size:.92rem}
+.tl-item ol,.tl-item ul{margin:0;padding-left:20px;display:grid;gap:4px}
+.tl-media{display:grid;gap:8px;align-content:start;min-width:0}
+.rules{position:sticky;top:calc(var(--navh) + 18px);background:color-mix(in srgb,var(--surface) 94%,transparent);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 24px 60px -30px rgba(0,0,0,.8);min-width:0}
+.rules h3{padding:12px 14px;border-bottom:1px solid var(--line);font-size:1.05rem;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.rules h3 small{font:600 .66rem var(--f-mono);letter-spacing:.12em;color:var(--muted);text-transform:uppercase}
+.rules ol{margin:0;padding:12px 14px 14px 34px;display:grid;gap:8px;font-size:.88rem;color:#d6cdbd}
+.rules ol li::marker{color:var(--gold);font-family:var(--f-mono);font-size:.8rem}
+.rules .assign{border-top:1px solid var(--line);padding:12px 14px;display:grid;gap:8px}
+.rules .assign div{display:grid;grid-template-columns:auto 1fr;gap:10px;font-size:.84rem;align-items:baseline}
+.rules .assign b{font:600 .72rem var(--f-mono);color:var(--gold);white-space:nowrap}
+.rules .assign span{color:var(--muted)}
+.overview{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,320px);gap:16px;align-items:start;border:1px solid var(--line);border-radius:14px;padding:16px;background:linear-gradient(90deg,color-mix(in srgb,var(--pa,#a35cff) 10%,var(--surface)),var(--surface) 70%)}
+.overview p{color:#d6cdbd;font-size:.95rem}
+.overview .txt{display:grid;gap:10px;min-width:0}
+
+.lightbox{position:fixed;inset:0;z-index:70;background:rgba(5,4,8,.92);display:grid;place-items:center;padding:24px;cursor:zoom-out}
+.lightbox img{max-width:100%;max-height:100%;border-radius:10px}
+.src-list{margin:0;padding-left:18px;display:grid;gap:6px;font-size:.9rem;color:var(--muted)}
+.credit{border:1px solid color-mix(in srgb,var(--gold) 40%,var(--line));border-radius:14px;padding:16px;background:color-mix(in srgb,var(--gold) 7%,var(--surface));display:grid;gap:6px}
+.credit p{color:#d6cdbd;font-size:.92rem}
+footer{border-top:1px solid var(--line);margin-top:60px;padding-block:28px 40px;color:var(--muted);font-size:.82rem}
+
+@media (max-width:980px){
+  .route{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .glayout,.overview{grid-template-columns:minmax(0,1fr)}
+  .rules{position:static}
+  .tl-item{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:620px){
+  .route{grid-template-columns:minmax(0,1fr)}
+  .portal{min-height:240px}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tl{padding-left:22px}
+  .tl::before{left:6px}
+  .tl-item::before{left:-21px}
+  .tl-bar{position:static;text-align:left;width:auto}
+  .hud-title{max-width:100%}
+  .caption{bottom:34px;font-size:.8rem}
+  .cmp{left:12px;right:12px;width:auto;top:auto;bottom:70px}
+  .vid-link span{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .marquee .track,.title .ch,.hero-art img{animation:none}
+  html{scroll-behavior:auto}
+}
+.route.r3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.portal[data-p="klaw"]{--pa:#9be15d}.portal[data-p="blatt"]{--pa:#dc5841}.portal[data-p="barg"]{--pa:#ff7a20}
+.chips[data-b="klaw"]{--cc:#9be15d}.chips[data-b="blatt"]{--cc:#ff6a7a}.chips[data-b="barg"]{--cc:#ff9a4a}
+.title{filter:drop-shadow(0 6px 30px rgba(255,122,32,.35));font-size:clamp(3rem,11vw,7.6rem);white-space:nowrap}
+@media (max-width:980px){.route.r3{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true"></div>
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="wrap row">
+    <a class="brand" href="#top"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z" stroke="#d4a85a" stroke-width="1.5" stroke-linejoin="round"/><circle cx="9" cy="11" r="1.6" fill="#9be15d"/><circle cx="15" cy="11" r="1.6" fill="#ff7a20"/></svg><span>Grimoire</span></a>
+    <nav class="nav" id="nav" aria-label="Sections">
+      <a href="#raid">Le raid</a><a href="#arena-sec">Arène 3D</a><a href="#klawfly">Klawfly</a><a href="#blatt">Blatt</a><a href="#bargott">Bargott</a><a href="#faq">FAQ</a><a href="#src">Sources</a>
+    </nav>
+    <a class="vid-link" href="https://www.youtube.com/watch?v=D0wxWbwLvds&amp;t=902s" target="_blank" rel="noopener" title="Le guide en vidéo sur YouTube">▶ <span>Vidéo</span></a>
+  </div>
+  <div class="bosshp" aria-hidden="true"><i id="hpFill" style="width:100%"></i><b id="hpTxt">BARGOTT · 100 %</b></div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-art" aria-hidden="true"><img src="img/banniere.webp" alt=""></div>
+  <canvas id="heroCv" aria-hidden="true"></canvas>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="wrap hero-in">
+    <div class="eyebrow"><span>Raid · 10 joueurs</span><span>GS 3 500 min.</span><span>Klawfly · Blatt · Bargott</span></div>
+    <h1 class="title" id="title" aria-label="Corroded">Corroded</h1>
+    <div class="subtitle">Decontamination Facility <small>Sanctuaire · deuxième raid d'Aion 2</small></div>
+    <p class="hero-copy">Poison, sang noir et brûlures. Deux mini-boss puis Terminator Bargott. Chaque attaque et chaque mécanique avec le clip du jeu, les schémas de placement et une arène 3D pour voir où se mettre.</p>
+    <div class="cta">
+      <a class="btn prime" href="#arena-sec">▶ Mécaniques en 3D</a>
+      <a class="btn ghost" href="#klawfly">Klawfly</a>
+      <a class="btn ghost" href="#blatt">Blatt</a>
+      <a class="btn ghost" href="#bargott">Bargott</a>
+    </div>
+    <div class="stats">
+      <div><b>10</b><span>Joueurs</span></div>
+      <div><b>3 500</b><span>Gearscore min.</span></div>
+      <div><b>350–450K</b><span>Combat power</span></div>
+      <div><b>&lt; 20 min</b><span>Fast clear</span></div>
+    </div>
+  </div>
+  <span class="credit-hero">Image : guidemmo.com</span>
+</section>
+
+<div class="marquee" aria-hidden="true"><div class="track" id="mq"></div></div>
+
+<main id="main">
+
+<section class="chapter wrap" id="raid">
+  <div class="chapter-head">
+    <div class="kicker">Déroulement</div>
+    <h2>Trois boss, trois poisons</h2>
+    <p class="lead">Le raid se joue à 10 avec 3 500 de gearscore minimum : deux mini-boss puis un combat final contre Terminator Bargott. Prévoyez beaucoup de dissipations et de potions jaunes : sur chaque boss, ce sont les stacks qui tuent.</p>
+  </div>
+  <div class="route r3">
+    <article class="portal" data-p="klaw">
+      <img class="art" src="img/boss-1-attaque-pluie.webp" alt="" loading="lazy">
+      <span class="gtag">Boss 1 · poison</span>
+      <h3>Devouring Klawfly</h3>
+      <ul class="threats"><li>Stacks de poison sur tout le raid</li><li>80 / 20 % : se cacher derrière une pierre</li><li>50 % : orbes dans l'ordre 1 à 8</li></ul>
+      <a class="btn sm" href="#klawfly">Klawfly →</a>
+    </article>
+    <article class="portal" data-p="blatt">
+      <img class="art" src="img/boss-2-attaque-yeux.webp" alt="" loading="lazy">
+      <span class="gtag">Boss 2 · saignement</span>
+      <h3>Black Blood Blatt</h3>
+      <ul class="threats"><li>Frappes très lourdes, placement en duos</li><li>75 / 20 % : tentacules de la bonne couleur</li><li>50 % : tuer le monstre au bon moment</li></ul>
+      <a class="btn sm" href="#blatt">Blatt →</a>
+    </article>
+    <article class="portal" data-p="barg">
+      <img class="art" src="img/boss-3-mecanique-2-50.webp" alt="" loading="lazy">
+      <span class="gtag">Boss final · brûlures</span>
+      <h3>Terminator Bargott</h3>
+      <ul class="threats"><li>Marteaux sur les cases après la 1re méca</li><li>80 / 25 % : le faire rouler sur les bombes</li><li>50 % : 8 bombes sur la plateforme</li></ul>
+      <a class="btn sm" href="#bargott">Bargott →</a>
+    </article>
+  </div>
+</section>
+
+<section class="chapter wrap" id="arena-sec">
+  <div class="chapter-head">
+    <div class="kicker">Schémas animés</div>
+    <h2>Arène en 3D</h2>
+    <p class="lead">Choisis une mécanique sous l'arène. Fais glisser pour tourner la caméra, molette ou pincement pour zoomer. « Comparer avec le jeu » ouvre le clip correspondant à côté du schéma. Les numéros au-dessus des joueurs sont les marqueurs 1 à 8.</p>
+  </div>
+  <div class="stage" id="stage">
+    <canvas id="arena" aria-label="Arène 3D montrant la mécanique sélectionnée"></canvas>
+    <div class="hud">
+      <div class="hud-title"><span id="simGate">—</span><b id="simName">Chargement…</b></div>
+      <div class="seg" role="group" aria-label="Caméra">
+        <button class="btn sm on" data-cam="orbit" type="button">Libre</button>
+        <button class="btn sm" data-cam="top" type="button">Dessus</button>
+        <button class="btn sm" data-cam="low" type="button">Raid</button>
+        <button class="btn sm" data-cam="boss" type="button">Boss</button>
+        <button class="btn sm" data-cam="party" type="button">Groupe</button>
+      </div>
+    </div>
+    <div class="caption" id="simCap">Chargement de l'arène…</div>
+    <div class="gauge" id="gauge" hidden><small id="gaugeLbl">—</small><div class="gauge-bar"><i id="gaugeFill"></i></div></div>
+    <aside class="cmp" id="cmp" hidden><div class="cmp-h"><b>Dans le jeu</b><small>clip guidemmo.com</small><button class="x" id="cmpClose" type="button" aria-label="Fermer le clip">×</button></div><video id="cmpVid" muted loop playsinline controls preload="none"></video></aside>
+  </div>
+  <div class="ctrl">
+    <button class="btn" id="play" type="button">❚❚ Pause</button>
+    <button class="btn" id="restart" type="button">↺ Rejouer</button>
+    <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Avancement de la mécanique">
+    <span class="num" id="tLbl" style="color:var(--muted)">0.0 s</span>
+    <select id="speed" aria-label="Vitesse"><option value="0.5">×0.5</option><option value="1" selected>×1</option><option value="1.5">×1.5</option><option value="2">×2</option></select>
+    <label class="tg"><input type="checkbox" id="tglLabels" checked> Noms</label>
+    <button class="btn sm" id="btnCmp" type="button">🎬 Comparer avec le jeu</button>
+    <button class="btn sm" id="btnFull" type="button">⛶ Plein écran</button>
+  </div>
+  <div class="chip-group" id="chipGroup"></div>
+  <div class="legend">
+    <span><i style="background:var(--m-death)"></i>Mortel / très gros dégâts</span><span><i style="background:var(--kd)"></i>Dégâts / zone à partager</span><span><i style="background:var(--safe)"></i>Zone sûre</span><span><i style="background:#9be15d"></i>Poison</span><span><i style="background:#ff7a20"></i>Feu</span><span><i style="background:var(--void)"></i>Violet</span><span><i style="background:#d4a85a"></i>Tank</span><span><i style="background:#3fd77a"></i>Soin / Aède</span><span><i style="background:#8fd3bf"></i>DPS</span>
+    <span class="keys">Clavier : Espace pause · ←/→ ±0,5 s · [ ] mécanique précédente/suivante</span>
+  </div>
+  <ol class="steps" id="steps"></ol>
+</section>
+
+<section class="chapter wrap" id="klawfly" style="--pa:#9be15d">
+  <div class="chapter-head">
+    <div class="kicker">Boss 1 · poison</div>
+    <h2>Devouring Klawfly</h2>
+    <p class="lead">Le vrai danger n'est pas ses coups mais le cumul des poisons et sa mécanique principale. À partir de 50 %, il est enragé : une pluie de poison passive (non ciblée) tombe sur toute la carte.</p>
+  </div>
+  <div class="sec overview">
+    <div class="txt">
+      <h3>Poison et préparation</h3>
+      <p>Potion jaune de base : retire 1 stack de poison. Potion craftée : 2 stacks. Les soigneurs dissipent les stacks régulièrement.</p>
+      <p>Pour la mécanique des orbes, fixez avant le pull l'ordre des joueurs avec les marqueurs 1 à 8.</p>
+      <div class="tip"><b>Cycle</b>Il enchaîne ses attaques dans un ordre fixe. Plus vous tapez fort, plus vite les mécaniques interrompent le cycle.</div>
+      <div class="acts"><button class="btn sm" type="button" data-sim="klaw-orbes">▶ Placement des orbes en 3D</button></div>
+    </div>
+    <figure class="diag"><img src="img/placement-boss-1.webp" alt="Schéma : placement en losange des joueurs 1 à 8 autour de Klawfly" loading="lazy"><figcaption>Placement 1 à 8 pour les orbes · schéma guidemmo.com</figcaption></figure>
+  </div>
+  <div class="sec"><div class="sec-h"><h3>Attaques de base</h3><span>dans l'ordre du cycle</span></div><div class="atks" id="atkKlaw"></div></div>
+  <div class="sec"><div class="rail" id="railKlaw"></div></div>
+  <div class="glayout">
+    <div class="tl" id="tlKlaw"></div>
+    <aside class="rules">
+      <h3>Règles d'or <small>Klawfly</small></h3>
+      <ol>
+        <li>Toujours répartis sur la carte, jamais deux poisons au même endroit.</li>
+        <li>Toiles : courir à l'opposé. Après 50 %, ne pas se stacker.</li>
+        <li>Laser : directement derrière lui.</li>
+        <li>Pierres : en garder une, se cacher derrière, puis partir vite.</li>
+        <li>Orbes : une à la fois, attendre le violet, aucune ne touche le mur.</li>
+      </ol>
+      <div class="assign">
+        <div><b>Marqueurs</b><span>1 à 8 fixés avant le pull : c'est l'ordre des orbes.</span></div>
+        <div><b>Soins</b><span>Dissipation régulière des stacks de poison.</span></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="chapter wrap" id="blatt" style="--pa:#dc5841">
+  <div class="chapter-head">
+    <div class="kicker">Boss 2 · saignement</div>
+    <h2>Black Blood Blatt</h2>
+    <p class="lead">Ses attaques font très mal, et un saignement-poison doit être dissipé régulièrement. Il garde la même rotation d'attaques jusqu'à la fin, avec un placement fixe en quatre duos.</p>
+  </div>
+  <div class="sec overview">
+    <div class="txt">
+      <h3>Placement en duos</h3>
+      <p>Quatre duos autour du boss : 3-4 en haut à gauche, 5-6 en haut à droite, 1-2 en bas à gauche, 7-8 en bas à droite (spawn en bas).</p>
+      <div class="tip"><b>Duos</b>Idéalement DPS + support ou DPS + tank, plutôt que DPS + DPS ou support + support.</div>
+      <div class="acts"><button class="btn sm" type="button" data-sim="blatt-zones">▶ Placement en 3D</button></div>
+    </div>
+    <figure class="diag"><img src="img/placement-boss-2.webp" alt="Schéma : quatre duos de joueurs autour de Blatt" loading="lazy"><figcaption>Placement en 4 duos · schéma guidemmo.com</figcaption></figure>
+  </div>
+  <div class="sec"><div class="sec-h"><h3>Attaques de base</h3><span>même rotation jusqu'à la fin</span></div><div class="atks" id="atkBlatt"></div></div>
+  <div class="sec"><div class="rail" id="railBlatt"></div></div>
+  <div class="glayout">
+    <div class="tl" id="tlBlatt"></div>
+    <aside class="rules">
+      <h3>Règles d'or <small>Blatt</small></h3>
+      <ol>
+        <li>Zikel : rentrer à moins de 15 m.</li>
+        <li>Yeux rouges : CàC collés à l'œil CàC, l'œil à distance s'éloigne.</li>
+        <li>In Out : dash dehors juste après le cercle extérieur.</li>
+        <li>Tentacules : le premier mot de la voiceline donne la couleur.</li>
+        <li>Zone bleue : tuer le monstre à 2 s ou moins de la fin du cast.</li>
+      </ol>
+      <div class="assign">
+        <div><b>Projectile</b><span>Absorbé par le joueur le plus bas en PV : il remonte full.</span></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="chapter wrap" id="bargott" style="--pa:#ff7a20">
+  <div class="chapter-head">
+    <div class="kicker">Boss final · brûlures</div>
+    <h2>Terminator Bargott</h2>
+    <p class="lead">Beaucoup de brûlures : Clercs et Aèdes dissipent les stacks, et tout le monde utilise des potions jaunes. Après la première mécanique, des marteaux tombent sur les cases pendant tout le reste du combat. À 50 %, Bargott s'enflamme : ses attaques deviennent plus rapides et plus fortes.</p>
+  </div>
+  <div class="sec"><div class="sec-h"><h3>Attaques de base</h3><span>arène quadrillée</span></div><div class="atks" id="atkBarg"></div></div>
+  <div class="sec"><div class="rail" id="railBarg"></div></div>
+  <div class="glayout">
+    <div class="tl" id="tlBarg"></div>
+    <aside class="rules">
+      <h3>Règles d'or <small>Bargott</small></h3>
+      <ol>
+        <li>Zones de feu au mur, puis un autre bord la fois suivante.</li>
+        <li>Split Damage : un maximum de joueurs dans chaque zone.</li>
+        <li>Blind : dos au boss, puis courir à gauche.</li>
+        <li>Épées : bouger doucement, ne projeter personne hors de l'arène.</li>
+        <li>Bombes : rush devant le boss, lire son numéro, prendre sa case.</li>
+        <li>Plateforme : 8 bombes lancées, la survie d'abord.</li>
+      </ol>
+      <div class="assign">
+        <div><b>Grab</b><span>Le joueur le plus loin se fait attraper : pas un Clerc.</span></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="chapter wrap" id="faq">
+  <div class="chapter-head">
+    <div class="kicker">Avant d'entrer</div>
+    <h2>FAQ</h2>
+  </div>
+  <div class="spec">
+    <div class="sc" style="--c:#d4a85a"><b class="h">Combat power</b><div class="big">350K<small>MINIMUM</small></div><p>450K pour être à l'aise.</p></div>
+    <div class="sc" style="--c:#3fd77a"><b class="h">Composition</b><div class="big">2 + 2 + 1<small>CLERCS · AÈDES · TEMPLIER</small></div><p>2 Clercs, 2 Aèdes, 1 Templier, puis un mélange de DPS.</p></div>
+    <div class="sc" style="--c:#ff7a20"><b class="h">Durée</b><div class="big">&lt; 20 min<small>FAST CLEAR</small></div><p>2 heures maximum par tentative. En cas d'échec, le ticket n'est pas consommé.</p></div>
+  </div>
+  <div class="sec" style="margin-top:16px">
+    <div class="credit"><h3>Récompenses</h3><p>8 Sync Stones héroïques, 40 Sync Stones jaunes, plus de 40 fragments de pierre d'amplification héroïques et jaunes, 8 millions de kinah, beaucoup d'objets (avec une chance d'armes, d'objets ou de bracelets héroïques) et une chance de ressources de craft dorées.</p></div>
+  </div>
+</section>
+
+<section class="chapter wrap" id="src">
+  <div class="chapter-head">
+    <div class="kicker">Sources</div>
+    <h2>Crédits</h2>
+  </div>
+  <div class="credit">
+    <p>Mécaniques, schémas, images et clips repris du guide <a href="https://guidemmo.com/sanctuaire-corroded-decontamination-facility/" target="_blank" rel="noopener">Corroded Decontamination Facility</a> d'Iruminati sur guidemmo.com, et de <a href="https://www.youtube.com/watch?v=D0wxWbwLvds&amp;t=902s" target="_blank" rel="noopener">cette vidéo</a>. Les textes ont été reformulés. Les schémas 3D sont des simplifications pour comprendre les placements.</p>
+  </div>
+</section>
+
+</main>
+<footer><div class="wrap">Guide fan non officiel. Aion 2 et ses personnages appartiennent à leurs ayants droit. Images et clips : guidemmo.com.</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+"use strict";
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=s=>document.querySelector(s);
+
+/* ===== content (reformulé d'après le guide guidemmo.com) ===== */
+const ATK={
+klaw:[
+ {n:'Pluie de poison',k:'Attaque 1',m:'boss-1-attaque-pluie',sim:'klaw-pluie',p:'Klawfly plante ses mandibules dans le sol puis les lève : du poison tombe sur chaque joueur. Chaque impact fait de gros dégâts et ajoute 1 stack de poison. Répartissez-vous sur la carte : deux poisons au même endroit peuvent one-shot.',tip:'Inutile de courir partout : faites de petits cercles sur place.'},
+ {n:'Toiles',k:'Attaque 2',m:'boss-1-attaque-toile',sim:'klaw-toiles',p:'Klawfly saute sur un bord de la carte, pose une zone de poison sous lui et agrippe tous les joueurs pour les tirer dedans. Courez ou dashez dans le sens opposé.',warn:'À partir de 50 %, une zone rouge (ni blocable ni esquivable en parfait) s\'ajoute au bout de chaque fil. NE VOUS STACKEZ PAS.'},
+ {n:'AoE',k:'Attaque 3',m:'boss-1-attaque-aoe',p:'Une attaque en demi-cercle, puis une AoE sur une très grande zone.'},
+ {n:'Laser',k:'Attaque 4 · après ~75 %',m:'boss-1-attaque-laser',sim:'klaw-laser',p:'Klawfly tourne sur lui-même, crache un laser devant lui puis pivote de 90°. Impossible de prévoir de quel côté.',tip:'Allez directement derrière lui : c\'est aussi une bonne fenêtre de burst.'},
+ {n:'Poursuite',k:'Attaque 5 · après ~75 %',m:'boss-1-attaque-enterre',sim:'klaw-poursuite',p:'Klawfly s\'enterre et poursuit un joueur, qui kite jusqu\'à ce qu\'il ressorte. En sortant, il frappe directement devant et derrière lui.',tip:'Le joueur poursuivi revient au centre pour replacer le boss.'}
+],
+blatt:[
+ {n:'Charge + Cône',k:'Attaque 1',m:'boss-2-attaque-dash-cone',sim:'blatt-charge',p:'Blatt charge sa cible en faisant des dégâts tout le long du chemin, puis se retourne à 180° pour un large cône.',tip:'Les CàC peuvent bloquer pendant la charge.'},
+ {n:'Zikel',k:'Attaque 2',m:'boss-2-attaque-zikel',sim:'blatt-zikel',p:'Blatt lève la main dans une aura violette et lance 3 lignes d\'attaque. Ensuite, chaque joueur entre 15 et 30 m génère une ligne de plus, dans l\'axe de son personnage (devant et derrière lui).',tip:'À distance, rapprochez-vous à moins de 15 m pendant l\'attaque pour ne rien déclencher.'},
+ {n:'Yeux rouges',k:'Attaque 3',m:'boss-2-attaque-yeux',sim:'blatt-yeux',p:'Blatt charge son poing vers le bas puis le plante dans le sol. Deux joueurs reçoivent un œil rouge (un au CàC, un à distance) et un cercle d\'attaque autour d\'eux. Une fois l\'impact passé, ces zones deviennent des safe zones pour l\'attaque suivante.',tip:'Au CàC, collez-vous à l\'œil rouge, bloquez et restez dans la safe zone. Si vous portez l\'œil à distance, éloignez-vous assez des CàC pour ne pas cumuler.'},
+ {n:'Cross + Grab',k:'Attaque 4',m:'boss-2-attaque-double-grab',p:'Blatt dash sur un joueur à distance et frappe en croix. Il cible ensuite un autre joueur à distance avec une large attaque très puissante qui attire les joueurs à son CàC.'},
+ {n:'In Out',k:'Attaque 5 · après la 1re mécanique',m:'boss-2-attaque-in-out',sim:'blatt-inout',p:'4 cercles partent de loin et se rapprochent du boss. Touché, vous êtes attrapé au CàC. À la fin, les joueurs au débuff violet font tomber une météorite sur eux.',tip:'Attendez que le cercle juste à l\'extérieur de vous explose, puis dashez dehors.'}
+],
+barg:[
+ {n:'AoE ×3',k:'Attaque 1',m:'boss-3-attaque-1-aoe',sim:'barg-aoe',p:'Trois frappes circulaires : la 1re au corps à corps, la 2e au corps à corps mais plus large, la 3e à distance avec une safe zone au CàC et très loin.'},
+ {n:'Zone de feu + Split Damage',k:'Attaque 2',m:'boss-3-attaque-2-zone-de-feu-sink',sim:'barg-feu',p:'Zone de feu : Bargott se téléporte au centre et envoie une vague de feu à sauter. Collez-vous ensuite au mur pour poser vos 3 zones de feu loin de l\'arène, puis revenez vite sur le boss. Split Damage : 3 frappes, à gauche du boss (sa main droite), de l\'autre côté, puis au centre. Un maximum de joueurs dans chaque zone pour partager les dégâts. Le joueur le plus loin se fait attraper : évitez que ce soit un Clerc.',tip:'Après l\'attaque, 3 joueurs ont une aura rouge : ils peuvent marcher sur une zone de feu mal placée pour l\'effacer (ça fait mal).',warn:'Quand l\'attaque revient, le Draupnir fait exploser les zones déjà posées : placez les nouvelles sur un autre bord.',diag:['feu','Zone de feu posée au mur']},
+ {n:'Roulades',k:'Attaque 3',m:'boss-3-attaque-3-roulade',sim:'barg-roulades',p:'Deux roulades : la 1re vers le joueur le plus éloigné, la 2e vers le plus proche. Ensuite viennent soit les trous noirs, soit le shotgun.',tip:'Avec un bon timing, la roulade se bloque.'},
+ {n:'Laser',k:'Attaque 4',m:'boss-3-attaque-4-laser',sim:'barg-laser',p:'Bargott se tape le ventre plusieurs fois, puis tire un laser très puissant en balayant 180° d\'un côté ou de l\'autre.'},
+ {n:'Blind + Orbes',k:'Attaque 5',m:'boss-3-attaque-5-blind-orbes',sim:'barg-blind',p:'Le gantelet prend une aura bleue : Bargott saute et fait exploser une bombe aveuglante. Tournez le dos à Bargott pour éviter l\'aveuglement. Ensuite, une volée d\'orbes qui s\'esquive facilement en courant vers la gauche.',tip:'L\'aveuglement est faible : vous verrez assez pour esquiver les orbes.'},
+ {n:'Épées + Bombes',k:'Attaque 6',m:'boss-3-attaque-6-epee-bombes',p:'Des joueurs ont une zone rouge qui fait tourner des épées autour d\'eux. Allez sur les bombes de la carte pour les retirer. Un joueur touché par une épée est projeté et prend des dégâts. Après l\'enrage, des bombes noires aveuglantes apparaissent aussi : évitez-les.',tip:'Avec une zone sur vous, bougez doucement au début pour ne toucher personne.',warn:'Toucher un joueur déjà au bord de l\'arène peut le projeter dehors : il ne pourra plus revenir.'},
+ {n:'Trous noirs',k:'Attaque 7',m:'boss-3-attaque-7-trous-noirs',p:'Bargott charge une attaque au ventre puis fait apparaître 2 trous noirs qui restent assez longtemps. Ils font des dégâts, attirent et ralentissent.'}
+]};
+const MECH={
+klaw:[
+ {hp:'~80 / 20 %',n:'Les pierres',m:'boss-1-mecanique-callioux',sim:'klaw-pierres',p:['Klawfly invoque des pierres et numérote 4 joueurs (numéros au-dessus de la tête). Il saute ensuite sur eux dans l\'ordre.','Les joueurs numérotés se placent sur les pierres pour les casser. Objectif : casser les pierres mais en garder UNE en vie.','Le boss cast ensuite une AoE one-shot : tout le monde se cache derrière la pierre restante.'],tip:'Une pierre non détruite laisse une zone de poison pour le reste du combat. Quand l\'AoE passe, la pierre derrière laquelle vous êtes explose : partez très vite. Vous pouvez sortir environ 1,5 s avant la fin du cast.'},
+ {hp:'~50 %',n:'Les orbes',m:'boss-1-mecanique-orbes',sim:'klaw-orbes',diag:['placement-boss-1','Placement en losange 1 à 8'],p:['Klawfly se téléporte au milieu et fait apparaître des orbes autour de lui. Prenez le placement en losange.','Les orbes se prennent dans l\'ordre fixé au début du donjon avec les marqueurs. Une fois une orbe prise, les autres passent en orange : attendez qu\'elles redeviennent violettes. Deux orbes prises en même temps infligent de lourds dégâts au raid.'],tip:'Les premiers numéros (1, 2, 3…) peuvent prendre les dernières orbes si d\'autres joueurs sont morts.',warn:'La pluie de poison continue pendant la mécanique : la survie d\'abord. Une orbe qui touche le mur extérieur = WIPE. S\'il reste 2 orbes près du mur, mieux vaut les prendre et encaisser.'}
+],
+blatt:[
+ {hp:'~75 / 20 %',n:'Tentacules',m:'boss-2-mecanique-tentacules',sim:'blatt-tentacules',diag:['1-1','Exemple de voiceline : « Red blood… »'],diag2:['1','Le boss annonce le projectile'],p:['Blatt revient au milieu avec une attaque en croix, puis des tentacules rouges et violettes apparaissent autour de lui. Gardez le placement d\'avant combat.'],ol:['Le boss fait une voiceline : son PREMIER mot est une couleur. Retenez-la.','Il lance un projectile sur tous les joueurs : esquivez (restez assez loin pour que ce soit plus facile).','Prenez au sol une tentacule de la couleur annoncée : vous survivez à l\'AoE one-shot.','Le boss relance le projectile.','Prenez la tentacule de l\'autre couleur.'],p2:'Exemple : « Red blood bursts forth… » → d\'abord les tentacules ROUGES, puis les VIOLETTES.',tip:'Si une tentacule apparaît sur vous et vous donne la mauvaise couleur, prenez volontairement le projectile pour retirer le buff. Le boss annonce le moment du projectile : regardez-le.',warn:'Le projectile peut casser les tentacules au sol. Utile s\'il en reste trop parce que des joueurs sont morts.'},
+ {hp:'~50 %',n:'Zone bleue',m:'boss-2-mecanique-zones-bleus',sim:'blatt-zones',diag:['placement-boss-2-1','Étape 1 : rentrer · étape 2 : devant le monstre'],diag2:['4','La barre de cast de l\'AoE'],p:['Blatt revient au centre avec une attaque CROSS. Reprenez le placement initial. Des zones bleues apparaissent avec un monstre au milieu. Deux fois de suite :'],ol:['Chaque joueur se met sur le bord extérieur de son cercle bleu.','Quand l\'attaque du boss part, rentrez vers l\'intérieur pour l\'esquiver.','Placez-vous devant le monstre pour absorber le projectile du boss.'],p2:'Le boss cast ensuite une attaque : le monstre du cercle doit mourir à 2 secondes ou moins de la fin du timer pour donner l\'invulnérabilité pendant l\'AoE.',tip:'C\'est le joueur avec le moins de PV qui absorbe le projectile : il remonte full vie. Le boss annonce ses attaques : regardez-le.',warn:'Tapez régulièrement le monstre pour le garder bas (5 à 10 stacks de vie, environ 20 %), afin de le tuer facilement au bon moment.'}
+],
+barg:[
+ {hp:'~80 / 25 %',n:'Les bombes',m:'boss-3-mecanic-1-bombes',sim:'barg-bombes',diag:['3-placmeents','Les 3 dispositions de bombes'],diag2:['148','Placement 1-4-8'],diag3:['184','Placement 1-8-4'],p:['Bargott disparaît et revient au centre. 8 joueurs reçoivent un numéro et des bombes apparaissent un peu partout. Il roule sur les joueurs dans l\'ordre : il faut le faire rouler sur toutes les bombes.','Il existe 3 dispositions de bombes, mais des placements fixes marchent pour toutes.','Dès le début : tout le monde rush DEVANT le boss, lit son numéro, puis prend sa place.'],tip:'Les numéros éloignés (6, 7, 8) peuvent taper un peu le boss avant d\'aller en place.',warn:'Si un joueur meurt pendant l\'attribution, le boss roule vers le joueur le plus proche à sa place, et fait une roulade de plus à la fin sur le 8. Mieux vaut le faire rouler vers le centre pour le replacer.'},
+ {hp:'~50 %',n:'La plateforme',m:'boss-3-mecanique-2-50',sim:'barg-plateforme',p:['Bargott se téléporte sur la plateforme derrière l\'arène, attire tous les joueurs et tire des shotguns en continu.','Des bombes sont posées au hasard. Ramassez-en une (touche action), revenez au bord de l\'arène face au boss, ciblez-le et appuyez sur la touche action pour la lui lancer. Il en faut 8.'],tip:'Les Clercs restent près de la zone du boss pour dissiper les brûlures et soigner. Les DPS vont chercher les bombes les plus éloignées.',warn:'Les marteaux continuent de tomber et il y a aussi des zones de poison. Vous avez le temps : la survie d\'abord.'}
+]};
+
+/* ===== title, marquee, glow, hp ===== */
+const T=$('#title');T.innerHTML=[...T.textContent].map((c,i)=>`<span class="ch" style="--i:${i}" aria-hidden="true">${c}</span>`).join('');
+const MQ=[['Pluie de poison','Klawfly'],['Toiles','Klawfly'],['Les pierres','Klawfly 80 %'],['Les orbes','Klawfly 50 %'],['Zikel','Blatt'],['Yeux rouges','Blatt'],['Tentacules','Blatt 75 %'],['Zone bleue','Blatt 50 %'],['Zone de feu','Bargott'],['Roulades','Bargott'],['Les bombes','Bargott 80 %'],['La plateforme','Bargott 50 %']];
+const mh=MQ.map(([a,b])=>`<span>${a}<em>${b}</em></span>`).join('');$('#mq').innerHTML=mh+mh;
+const cg=$('#cursorGlow');if(!RM&&matchMedia('(pointer:fine)').matches)addEventListener('pointermove',e=>{cg.style.transform=`translate(${e.clientX}px,${e.clientY}px)`},{passive:true});
+const hpFill=$('#hpFill'),hpTxt=$('#hpTxt'),navLinks=[...document.querySelectorAll('#nav a')],secs=navLinks.map(a=>document.querySelector(a.getAttribute('href')));
+function onScroll(){const max=document.documentElement.scrollHeight-innerHeight,p=max>0?Math.min(1,scrollY/max):0,hp=Math.max(0,Math.round(100-p*100));hpFill.style.width=hp+'%';hpTxt.textContent='BARGOTT · '+hp+' %';let cur=-1;secs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<innerHeight*.35)cur=i});navLinks.forEach((a,i)=>a.classList.toggle('cur',i===cur))}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* hero embers + lightning over the art */
+(function(){const cv=$('#heroCv'),ctx=cv.getContext('2d');let W,H,parts=[],bolt=null,nb=2,last=0,vis=true;
+ function size(){const d=Math.min(devicePixelRatio||1,2);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);parts=Array.from({length:Math.round(W*H/11000)},()=>({x:Math.random()*W,y:Math.random()*H,v:10+Math.random()*30,r:Math.random()*1.6+.3,h:Math.random()<.5,o:Math.random()}))}
+ function mk(){let x=W*(.5+Math.random()*.45),y=0;const p=[[x,y]];while(y<H*.6){y+=12+Math.random()*26;x+=(Math.random()-.5)*46;p.push([x,y])}return{p,l:.45}}
+ function draw(t,dt){ctx.clearRect(0,0,W,H);for(const q of parts){q.y-=q.v*dt;q.x+=Math.sin(t+q.o*6)*6*dt;if(q.y<-5){q.y=H+5;q.x=Math.random()*W}ctx.fillStyle=q.h?`rgba(170,130,255,${.2+.35*q.o})`:`rgba(255,150,90,${.2+.3*q.o})`;ctx.beginPath();ctx.arc(q.x,q.y,q.r,0,7);ctx.fill()}
+  if(bolt){const a=bolt.l/.45;ctx.fillStyle=`rgba(190,170,255,${.08*a})`;ctx.fillRect(0,0,W,H);ctx.strokeStyle=`rgba(225,215,255,${a})`;ctx.shadowColor='#a98bff';ctx.shadowBlur=18;ctx.lineWidth=2;ctx.beginPath();bolt.p.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();ctx.shadowBlur=0}}
+ function loop(ts){const t=ts/1000,dt=Math.min(.05,t-(last||t));last=t;if(vis){nb-=dt;if(nb<0){bolt=mk();nb=4+Math.random()*5}if(bolt){bolt.l-=dt;if(bolt.l<=0)bolt=null}draw(t,dt)}requestAnimationFrame(loop)}
+ size();addEventListener('resize',size);new IntersectionObserver(e=>{vis=e[0].isIntersecting}).observe(cv);if(!RM)requestAnimationFrame(loop)})();
+
+/* ===== render sections ===== */
+const clipHTML=(m,c)=>`<figure class="clip" tabindex="0" role="button" aria-label="Lire le clip" data-clip="media/${c||m}.mp4"><img src="img/${m}.webp" alt="" loading="lazy"><span class="pb">▶</span><span class="src">guidemmo.com</span></figure>`;
+const diagHTML=d=>d?`<figure class="diag"><img src="img/${d[0]}.webp" alt="${d[1]}" loading="lazy"><figcaption>${d[1]} · schéma guidemmo.com</figcaption></figure>`:'';
+const simBtn=s=>s?`<div class="acts"><button class="btn sm" type="button" data-sim="${s}">▶ Voir en 3D</button></div>`:'';
+function renderAtk(el,list){el.innerHTML=list.map(a=>`<article class="atk">${a.m?clipHTML(a.m):''}${a.m2?clipHTML(a.m2,a.m2c):''}<h4>${a.n}<small>${a.k.toUpperCase()}</small></h4><p>${a.p}</p>${a.tip?`<div class="tip"><b>Astuce</b>${a.tip}</div>`:''}${a.warn?`<div class="warn"><b>Attention</b>${a.warn}</div>`:''}${diagHTML(a.diag)}${diagHTML(a.diag2)}${simBtn(a.sim)}</article>`).join('')}
+function renderTl(el,list,key){el.innerHTML=list.map((m,i)=>`<div class="tl-item" id="m-${key}-${i}"><span class="tl-bar">${m.hp}</span><div class="tl-txt"><h3>${m.n}${m.hp2?` <span class="ko">${m.hp2}</span>`:''}</h3>${m.p.map(x=>`<p>${x}</p>`).join('')}${m.ol?`<ol>${m.ol.map(x=>`<li>${x}</li>`).join('')}</ol>`:''}${m.list?`<ul>${m.list.map(x=>`<li>${x}</li>`).join('')}</ul>`:''}${m.p2?`<p>${m.p2}</p>`:''}${m.tip?`<div class="tip"><b>Astuce</b>${m.tip}</div>`:''}${m.warn?`<div class="warn"><b>Attention</b>${m.warn}</div>`:''}${simBtn(m.sim)}</div><div class="tl-media">${clipHTML(m.m)}${diagHTML(m.diag)}${diagHTML(m.diag2)}${diagHTML(m.diag3)}</div></div>`).join('')}
+function renderRail(el,marks,key){el.innerHTML=`<div class="rail-bar">${marks.map(([pct,lbl,idx],k)=>`<a class="mk${k%2?' lo':''}${pct>=85?' end':pct<=15?' start':''}" href="#m-${key}-${idx}" style="left:${pct}%"><span>${lbl}</span></a>`).join('')}</div><div class="rail-ends"><span>0 %</span><span>PV du boss</span><span>100 %</span></div>`}
+renderAtk($('#atkKlaw'),ATK.klaw);renderAtk($('#atkBlatt'),ATK.blatt);renderAtk($('#atkBarg'),ATK.barg);
+renderTl($('#tlKlaw'),MECH.klaw,'klaw');renderTl($('#tlBlatt'),MECH.blatt,'blatt');renderTl($('#tlBarg'),MECH.barg,'barg');
+renderRail($('#railKlaw'),[[80,'Pierres 80',0],[50,'Orbes 50 · enragé',1],[20,'Pierres 20',0]],'klaw');
+renderRail($('#railBlatt'),[[75,'Tentacules 75',0],[50,'Zone bleue 50',1],[20,'Tentacules 20',0]],'blatt');
+renderRail($('#railBarg'),[[80,'Bombes 80',0],[50,'Plateforme 50 · enflammé',1],[25,'Bombes 25',0]],'barg');
+
+/* clip players + lightbox */
+function playClip(f){if(f.classList.contains('playing'))return;const v=document.createElement('video');v.src=f.dataset.clip;v.controls=true;v.autoplay=true;v.muted=true;v.loop=true;v.playsInline=true;f.appendChild(v);f.classList.add('playing');v.play&&v.play().catch(()=>{})}
+document.addEventListener('click',e=>{const f=e.target.closest('.clip');if(f){playClip(f);return}
+ const d=e.target.closest('.diag img');if(d){const lb=document.createElement('div');lb.className='lightbox';lb.innerHTML=`<img src="${d.getAttribute('src')}" alt="${d.alt}">`;lb.addEventListener('click',()=>lb.remove());document.body.appendChild(lb)}});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList&&e.target.classList.contains('clip')){e.preventDefault();playClip(e.target)}if(e.key==='Escape'){const lb=$('.lightbox');if(lb)lb.remove()}});
+
+/* ===== 3D ARENA ===== */
+const canvas=$('#arena');
+if(!window.THREE){canvas.outerHTML='<div class="nogl">L\'arène 3D n\'a pas pu se charger. Les explications, clips et schémas restent disponibles plus bas.</div>';return}
+let renderer;try{renderer=new THREE.WebGLRenderer({canvas,antialias:true})}catch(e){canvas.outerHTML='<div class="nogl">WebGL n\'est pas disponible sur cet appareil. Les explications, clips et schémas restent disponibles plus bas.</div>';return}
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+const scene=new THREE.Scene();scene.background=new THREE.Color(0x0d0b10);scene.fog=new THREE.Fog(0x0d0b10,45,95);
+const camera=new THREE.PerspectiveCamera(45,2,.1,250);
+const controls=new THREE.OrbitControls(camera,canvas);controls.enableDamping=true;controls.maxPolarAngle=Math.PI*.49;controls.minDistance=10;controls.maxDistance=80;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+scene.add(new THREE.HemisphereLight(0x9a8cc8,0x1a1420,.8));const dl=new THREE.DirectionalLight(0xffe2b0,1);dl.position.set(-12,28,14);dl.castShadow=true;dl.shadow.mapSize.set(2048,2048);Object.assign(dl.shadow.camera,{left:-26,right:26,top:26,bottom:-26,near:1,far:80});dl.shadow.bias=-.0008;scene.add(dl);
+const rim=new THREE.DirectionalLight(0x8a6cff,.7);rim.position.set(10,12,-24);scene.add(rim);
+(()=>{const c=document.createElement('canvas');c.width=512;c.height=256;const x=c.getContext('2d'),g=x.createLinearGradient(0,0,0,256);g.addColorStop(0,'#1a1430');g.addColorStop(.42,'#5a4a8a');g.addColorStop(.5,'#c9a06a');g.addColorStop(.58,'#3a2c4a');g.addColorStop(1,'#0c0a10');x.fillStyle=g;x.fillRect(0,0,512,256);[[90,'#b48cff'],[300,'#4aa8ff'],[430,'#ff7a5a']].forEach(([cx,col])=>{const r=x.createRadialGradient(cx,100,0,cx,100,70);r.addColorStop(0,col);r.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=r;x.fillRect(0,0,512,256)});const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;const pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromEquirectangular(t).texture;t.dispose();pm.dispose()})();
+const R=18,deg=Math.PI/180;
+const C={death:0xff3b3b,kd:0xf2cf3c,safe:0x3fd77a,red:0xff5a4a,blue:0x4aa8ff,void:0xa35cff,gold:0xd4a85a,tank:0xd4a85a,heal:0x3fd77a,dps:0x8fd3bf,white:0xece5d7};
+function dialTex(square){const s=1024,c=document.createElement('canvas');c.width=c.height=s;const x=c.getContext('2d');
+ const g=x.createRadialGradient(s/2,s/2,0,s/2,s/2,s*.7);g.addColorStop(0,'#241e2d');g.addColorStop(.8,'#17131c');g.addColorStop(1,'#0e0b12');x.fillStyle=g;x.fillRect(0,0,s,s);
+ x.strokeStyle='rgba(212,168,90,.12)';x.lineWidth=2;
+ if(square){for(let i=1;i<6;i++){x.beginPath();x.moveTo(i*s/6,0);x.lineTo(i*s/6,s);x.moveTo(0,i*s/6);x.lineTo(s,i*s/6);x.stroke()}x.strokeStyle='rgba(212,168,90,.06)';for(let i=1;i<12;i+=2){x.beginPath();x.moveTo(i*s/12,0);x.lineTo(i*s/12,s);x.moveTo(0,i*s/12);x.lineTo(s,i*s/12);x.stroke()}}
+ else{for(let i=1;i<=6;i++){x.beginPath();x.arc(s/2,s/2,s/2*i/6.2,0,7);x.stroke()}for(let i=0;i<8;i++){const a=i*45*deg;x.beginPath();x.moveTo(s/2,s/2);x.lineTo(s/2+Math.sin(a)*s*.49,s/2+Math.cos(a)*s*.49);x.stroke()}}
+ const t=new THREE.CanvasTexture(c);t.anisotropy=4;return t}
+const floorC=new THREE.Group(),floorS=new THREE.Group();scene.add(floorC,floorS);
+floorC.add(new THREE.Mesh(new THREE.CircleGeometry(R,96).rotateX(-Math.PI/2),new THREE.MeshStandardMaterial({map:dialTex(false),roughness:.9})));floorC.children[0].receiveShadow=true;
+const ec=new THREE.Mesh(new THREE.RingGeometry(R,R+.35,128).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0x4a7ac4}));ec.position.y=.02;floorC.add(ec);
+const uc=new THREE.Mesh(new THREE.CylinderGeometry(R+.35,R-2,3,96,1,true),new THREE.MeshStandardMaterial({color:0x120f18,side:THREE.DoubleSide}));uc.position.y=-1.5;floorC.add(uc);
+floorS.add(new THREE.Mesh(new THREE.PlaneGeometry(2*R,2*R).rotateX(-Math.PI/2),new THREE.MeshStandardMaterial({map:dialTex(true),roughness:.9})));floorS.children[0].receiveShadow=true;
+const es=new THREE.Mesh(new THREE.BoxGeometry(2*R+.7,1.2,2*R+.7),new THREE.MeshStandardMaterial({color:0x120f18}));es.position.y=-.61;floorS.add(es);
+const esl=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(2*R,2*R).rotateX(-Math.PI/2)),new THREE.LineBasicMaterial({color:0x7b5cc4}));esl.position.y=.03;floorS.add(esl);
+const floorG=new THREE.Group();scene.add(floorG);
+(()=>{const W=36,D=20,c=document.createElement('canvas');c.width=1024;c.height=576;const x=c.getContext('2d'),g=x.createLinearGradient(0,0,0,576);g.addColorStop(0,'#2a252c');g.addColorStop(1,'#1b181f');x.fillStyle=g;x.fillRect(0,0,1024,576);
+ for(let i=0;i<500;i++){x.fillStyle=`rgba(255,255,255,${Math.random()*.035})`;x.fillRect(Math.random()*1024,Math.random()*576,8+Math.random()*50,2)}
+ for(let cx=0;cx<5;cx++)for(let cy=0;cy<5;cy++){x.strokeStyle='rgba(0,0,0,.35)';x.lineWidth=2;x.strokeRect(cx*204.8+22,cy*115.2+18,160,79);[[30,26],[174,26],[30,89],[174,89]].forEach(([a,b])=>{x.fillStyle='#3a343c';x.beginPath();x.arc(cx*204.8+a,cy*115.2+b,4,0,7);x.fill()})}
+ x.strokeStyle='#0b0a0d';x.lineWidth=16;for(let k=0;k<=5;k++){x.beginPath();x.moveTo(k*204.8,0);x.lineTo(k*204.8,576);x.stroke();x.beginPath();x.moveTo(0,k*115.2);x.lineTo(1024,k*115.2);x.stroke()}
+ x.strokeStyle='rgba(255,122,32,.22)';x.lineWidth=2;for(let k=0;k<=5;k++){x.beginPath();x.moveTo(k*204.8,0);x.lineTo(k*204.8,576);x.stroke();x.beginPath();x.moveTo(0,k*115.2);x.lineTo(1024,k*115.2);x.stroke()}
+ const t=new THREE.CanvasTexture(c);t.anisotropy=4;
+ const f=new THREE.Mesh(new THREE.PlaneGeometry(W,D).rotateX(-Math.PI/2),new THREE.MeshStandardMaterial({map:t,roughness:.5,metalness:.55}));f.receiveShadow=true;floorG.add(f);
+ const b=new THREE.Mesh(new THREE.BoxGeometry(W+.7,1.2,D+.7),new THREE.MeshStandardMaterial({color:0x120f18}));b.position.y=-.61;floorG.add(b);
+ const ed=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(W,D).rotateX(-Math.PI/2)),new THREE.LineBasicMaterial({color:0xff7a20}));ed.position.y=.03;floorG.add(ed);
+ const pl=new THREE.Mesh(new THREE.CylinderGeometry(3.4,3.9,1.6,32),new THREE.MeshStandardMaterial({color:0x2c2428,roughness:.55,metalness:.55,emissive:0x5a1a06,emissiveIntensity:.5}));pl.position.set(0,.8,-14.5);pl.receiveShadow=pl.castShadow=true;floorG.add(pl);
+ const rim=new THREE.Mesh(new THREE.TorusGeometry(3.4,.08,8,48).rotateX(Math.PI/2),new THREE.MeshBasicMaterial({color:0xff7a20}));rim.position.set(0,1.62,-14.5);floorG.add(rim)})();
+for(let i=0;i<8;i++){const a=(i*45+22.5)*deg,p=new THREE.Mesh(new THREE.CylinderGeometry(.6,.8,9,6),new THREE.MeshStandardMaterial({color:0x221b2c,roughness:.8}));p.position.set(Math.sin(a)*(R+6),2.5,Math.cos(a)*(R+6));scene.add(p);const f=new THREE.Mesh(new THREE.SphereGeometry(.35,10,8),new THREE.MeshBasicMaterial({color:i%2?0x4aa8ff:0xa35cff}));f.position.set(p.position.x,7.4,p.position.z);scene.add(f)}
+
+const glowTex=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');const g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.3,'rgba(255,255,255,.45)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(c)})();
+function glow(color,size){const s=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false}));s.scale.set(size,size,1);return s}
+function textSprite(text,color='#ece5d7',bg='rgba(11,10,14,.78)',scale=1){const c=document.createElement('canvas');c.width=256;c.height=96;const x=c.getContext('2d'),tex=new THREE.CanvasTexture(c);
+ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false}));sp.renderOrder=10;sp.scale.set(2.4*scale,.9*scale,1);
+ sp.setText=(t,col)=>{if(sp._t===t&&sp._c===col)return;sp._t=t;sp._c=col;x.clearRect(0,0,256,96);x.font='700 42px Golos Text, Segoe UI, sans-serif';const w=Math.min(250,x.measureText(t).width+28);if(bg){x.fillStyle=bg;x.beginPath();x.roundRect?x.roundRect(128-w/2,20,w,56,14):x.rect(128-w/2,20,w,56);x.fill()}x.fillStyle=col||color;x.textAlign='center';x.textBaseline='middle';x.fillText(t,128,50);tex.needsUpdate=true};
+ sp.setText(text);return sp}
+const mat=(color,o=.3)=>new THREE.MeshBasicMaterial({color,transparent:true,opacity:o,depthWrite:false,side:THREE.DoubleSide});
+function std(c,e=0,ei=0){return new THREE.MeshStandardMaterial({color:c,roughness:.55,metalness:.25,emissive:e,emissiveIntensity:ei})}
+
+/* bosses — modèles procéduraux détaillés */
+const UP=new THREE.Vector3(0,1,0),ZV=new THREE.Vector3(0,0,1);
+function rng(seed){let s=seed;return()=>{s=(s*16807)%2147483647;return s/2147483647}}
+function veinTex(seed,w,h,n){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d'),r=rng(seed);x.fillStyle='#000';x.fillRect(0,0,w,h);x.lineCap='round';x.lineJoin='round';
+ const branch=(px,py,a,len,lw,al)=>{x.strokeStyle=`rgba(${190+r()*50|0},${120+r()*60|0},255,${al})`;x.lineWidth=lw;x.beginPath();x.moveTo(px,py);for(let i=0;i<len;i++){a+=(r()-.5)*1.2;px+=Math.cos(a)*5;py+=Math.sin(a)*5;x.lineTo(px,py);if(r()<.08&&lw>.6){x.stroke();branch(px,py,a+(r()-.5)*2,len*.5|0,lw*.6,al*.8);x.beginPath();x.moveTo(px,py)}}x.stroke()};
+ x.shadowColor='#b48cff';x.shadowBlur=6;for(let k=0;k<n;k++)branch(r()*w,r()*h,r()*6.28,14+r()*26|0,1+r()*1.8,.55+r()*.45);
+ const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;return t}
+function scaleTex(){const s=256,c=document.createElement('canvas');c.width=c.height=s;const x=c.getContext('2d');x.fillStyle='#0c0a10';x.fillRect(0,0,s,s);
+ const R=16;for(let row=-1;row<s/R*1.6+1;row++)for(let col=-1;col<s/(R*2)+1;col++){const cx=col*R*2+(row%2?R:0),cy=row*R*.62;
+  const g=x.createRadialGradient(cx,cy-R*.3,1,cx,cy,R);g.addColorStop(0,'#3a3048');g.addColorStop(.7,'#221b2c');g.addColorStop(1,'#0a080d');x.fillStyle=g;x.beginPath();x.arc(cx,cy,R,0,Math.PI);x.fill()}
+ const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;return t}
+function sweepMesh(N,M,m){const cnt=(N+1)*(M+1),g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(new Float32Array(cnt*3),3));const uv=new Float32Array(cnt*2),idx=[];
+ for(let i=0;i<=N;i++)for(let j=0;j<=M;j++){const k=i*(M+1)+j;uv[k*2]=i/N;uv[k*2+1]=j/M;if(i<N&&j<M){const a=k,b=k+M+1;idx.push(a,b,a+1,b,b+1,a+1)}}
+ g.setAttribute('uv',new THREE.BufferAttribute(uv,2));g.setIndex(idx);const ms=new THREE.Mesh(g,m);ms.userData.NM=[N,M];return ms}
+const _T=new THREE.Vector3(),_B=new THREE.Vector3(),_N=new THREE.Vector3(),_P=new THREE.Vector3();
+function frameAt(curve,u){curve.getPointAt(u,_P);curve.getTangentAt(u,_T);_B.crossVectors(_T,UP);if(_B.lengthSq()<1e-6)_B.set(1,0,0);_B.normalize();_N.crossVectors(_B,_T).normalize()}
+function sweepUpdate(ms,curve,rf,sq=1){const [N,M]=ms.userData.NM,p=ms.geometry.attributes.position.array;
+ for(let i=0;i<=N;i++){const u=i/N;frameAt(curve,u);const r=rf(u);
+  for(let j=0;j<=M;j++){const th=j/M*Math.PI*2,c=Math.cos(th)*r,s=Math.sin(th)*r*sq,k=(i*(M+1)+j)*3;p[k]=_P.x+_B.x*c+_N.x*s;p[k+1]=_P.y+_B.y*c+_N.y*s;p[k+2]=_P.z+_B.z*c+_N.z*s}}
+ ms.geometry.attributes.position.needsUpdate=true;ms.geometry.computeVertexNormals();ms.geometry.computeBoundingSphere()}
+const table=T=>u=>{for(let k=1;k<T.length;k++)if(u<=T[k][0]){const a=T[k-1],b=T[k],f=(u-a[0])/(b[0]-a[0]),s=f*f*(3-2*f);return a[1]+(b[1]-a[1])*s}return T[T.length-1][1]};
+function bone(a,b,r1,r2,m,seg=8){const A=new THREE.Vector3(...a),B=new THREE.Vector3(...b),d=B.clone().sub(A),L=d.length(),ms=new THREE.Mesh(new THREE.CylinderGeometry(r2,r1,L,seg),m);ms.position.copy(A).addScaledVector(d,.5);ms.quaternion.setFromUnitVectors(UP,d.normalize());return ms}
+function spike(p,dir,len,r,m){const ms=new THREE.Mesh(new THREE.ConeGeometry(r,len,6),m),d=new THREE.Vector3(...dir).normalize();ms.position.set(...p).addScaledVector(d,len/2);ms.quaternion.setFromUnitVectors(UP,d);return ms}
+function joint(p,r,m){const s=new THREE.Mesh(new THREE.SphereGeometry(r,10,8),m);s.position.set(...p);return s}
+function tube(pts,r0,r1,m,N=24,M=8){const cv=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p))),ms=sweepMesh(N,M,m);sweepUpdate(ms,cv,u=>r0+(r1-r0)*u);return ms}
+
+function veinTexC(seed,w,h,n,rgb,blur){const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d'),r=rng(seed);x.fillStyle='#000';x.fillRect(0,0,w,h);x.lineCap='round';x.lineJoin='round';
+ const br=(px,py,a,len,lw,al)=>{x.strokeStyle=`rgba(${rgb[0]},${rgb[1]},${rgb[2]},${al})`;x.lineWidth=lw;x.beginPath();x.moveTo(px,py);for(let i=0;i<len;i++){a+=(r()-.5)*1.2;px+=Math.cos(a)*5;py+=Math.sin(a)*5;x.lineTo(px,py);if(r()<.08&&lw>.6){x.stroke();br(px,py,a+(r()-.5)*2,len*.5|0,lw*.6,al*.8);x.beginPath();x.moveTo(px,py)}}x.stroke()};
+ x.shadowColor=`rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;x.shadowBlur=blur||6;for(let k=0;k<n;k++)br(r()*w,r()*h,r()*6.28,14+r()*26|0,1+r()*2,.55+r()*.45);
+ const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;return t}
+function partsCloud(n,color,size,spawn){const g=new THREE.BufferGeometry(),p=new Float32Array(n*3),seed=[];for(let i=0;i<n;i++)seed.push(spawn(i));g.setAttribute('position',new THREE.BufferAttribute(p,3));
+ const pts=new THREE.Points(g,new THREE.PointsMaterial({map:glowTex,color,size,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));pts.userData.seed=seed;pts.userData.arr=p;return pts}
+
+/* Devouring Klawfly : insecte géant venimeux */
+function mkKlawfly(){
+ const g=new THREE.Group(),body=new THREE.Group();g.add(body);body.scale.setScalar(1.05);
+ const sc=scaleTex();sc.repeat.set(6,3);const vein=veinTexC(21,512,256,30,[150,230,90]);
+ const chit=new THREE.MeshStandardMaterial({color:0x9a8fa6,map:sc,bumpMap:sc,bumpScale:.04,roughness:.32,metalness:.45,emissive:0x8fe04a,emissiveMap:vein,emissiveIntensity:.9});
+ const shell=new THREE.MeshStandardMaterial({color:0x1d1724,roughness:.25,metalness:.6,emissive:0x2a0f3a,emissiveIntensity:.5});
+ const sac=new THREE.MeshPhysicalMaterial({color:0x6a2a9a,roughness:.15,metalness:0,clearcoat:1,emissive:0x7a2ad0,emissiveIntensity:.6,transparent:true,opacity:.9});
+ const legM=new THREE.MeshStandardMaterial({color:0x141018,roughness:.3,metalness:.55});
+ const thorax=new THREE.Mesh(new THREE.SphereGeometry(1.3,20,16),chit);thorax.scale.set(1.05,.9,1.2);thorax.position.set(0,2.6,.4);body.add(thorax);
+ const abd=new THREE.Group();abd.position.set(0,2.8,-1.1);body.add(abd);
+ for(let k=0;k<5;k++){const s=new THREE.Mesh(new THREE.SphereGeometry(1.55-k*.18,20,14),k%2?shell:chit);s.scale.set(1,.85,.7);s.position.set(0,.25*k,-.75*k);abd.add(s)}
+ const poison=new THREE.Mesh(new THREE.SphereGeometry(.9,18,14),sac);poison.position.set(0,-.35,-1.6);abd.add(poison);
+ abd.add(spike([0,.6,-3.6],[0,-.4,-1],1.1,.16,legM));
+ const head=new THREE.Group();head.position.set(0,2.7,1.9);body.add(head);
+ const hd=new THREE.Mesh(new THREE.SphereGeometry(.8,18,14),shell);hd.scale.set(1.1,.85,.95);head.add(hd);
+ const eyes=[];[-1,1].forEach(s=>{const e=new THREE.Mesh(new THREE.SphereGeometry(.42,16,12),new THREE.MeshPhysicalMaterial({color:0x3a0a0a,emissive:0xff2a2a,emissiveIntensity:.8,roughness:.1,clearcoat:1}));e.scale.set(.9,1,.8);e.position.set(.55*s,.25,.35);head.add(e);const eg=glow(0xff4a3a,1.4);eg.position.copy(e.position);head.add(eg);eyes.push(eg)});
+ const mand=[];[-1,1].forEach(s=>{const p=new THREE.Group();p.position.set(.35*s,-.35,.6);head.add(p);p.add(tube([[0,0,0],[.35*s,-.1,.6],[.25*s,-.25,1.2],[-.1*s,-.3,1.5]],.16,.02,legM,14,6));mand.push([p,s])});
+ head.add(tube([[-.2,.6,.3],[-.5,1.3,.6],[-.9,1.7,.5]],.04,.01,legM,10,4));head.add(tube([[.2,.6,.3],[.5,1.3,.6],[.9,1.7,.5]],.04,.01,legM,10,4));
+ const legs=[];const LZ=[1.1,.4,-.3,-.9];
+ LZ.forEach((z,k)=>[-1,1].forEach(s=>{const p=new THREE.Group();p.position.set(.9*s,2.4,z);body.add(p);const spread=(k-1.5)*.35;
+  const knee=[2.4*s,1.7,spread*2.2],foot=[4.2*s,-2.35,spread*3.4];p.add(bone([0,0,0],knee,.2,.14,legM));p.add(joint(knee,.17,shell));p.add(bone(knee,foot,.14,.04,legM));p.add(spike(foot,[0,-1,0],.3,.05,legM));legs.push([p,s,k])}));
+ const wm=new THREE.MeshStandardMaterial({color:0xc8e0d0,emissive:0x7ad060,emissiveIntensity:.25,roughness:.2,metalness:.2,transparent:true,opacity:.35,side:THREE.DoubleSide,depthWrite:false});
+ const ws=new THREE.Shape();ws.moveTo(0,0);ws.quadraticCurveTo(1.5,.9,4.2,.4);ws.quadraticCurveTo(3.2,-.6,0,-.25);ws.closePath();const wg=new THREE.ShapeGeometry(ws,10);
+ const wings=[];[[-1,0],[1,0],[-1,1],[1,1]].forEach(([s,r])=>{const p=new THREE.Group();p.position.set(.5*s,3.4,.2-r*.7);body.add(p);const w=new THREE.Mesh(wg,wm);if(s<0)w.scale.x=-1;w.rotation.x=-.3-r*.2;w.scale.multiplyScalar(1-r*.2);p.add(w);wings.push([p,s,r])});
+ const pl=new THREE.PointLight(0x8fe04a,1.1,14,2);pl.position.set(0,2,0);body.add(pl);
+ const gas=partsCloud(70,0x9be15d,.45,()=>[(Math.random()-.5)*5,Math.random()*4,(Math.random()-.5)*7,.3+Math.random()*.6]);body.add(gas);
+ g.traverse(o=>{if(o.isMesh&&o.material!==wm)o.castShadow=true});
+ function pose(t){wings.forEach(([p,s,r])=>{p.rotation.z=s*(.25+.35*Math.sin(t*38+r*1.5));p.rotation.y=s*.25});
+  mand.forEach(([p,s])=>p.rotation.y=s*(.15+.2*Math.sin(t*2.4)));
+  legs.forEach(([p,s,k])=>{p.rotation.x=.12*Math.sin(t*2+k*1.3+(s>0?Math.PI:0));p.rotation.z=s*.05*Math.sin(t*1.6+k)});
+  abd.rotation.x=.08*Math.sin(t*1.3);poison.scale.setScalar(1+.07*Math.sin(t*3));chit.emissiveIntensity=.7+.3*Math.sin(t*2);
+  eyes.forEach(e=>e.material.opacity=.7+.3*Math.sin(t*4));
+  const sd=gas.userData.seed,a=gas.userData.arr;for(let i=0;i<sd.length;i++){const [x,y,z,v]=sd[i];a[i*3]=x+Math.sin(t*.7+i)*.4;a[i*3+1]=(y+t*v)%4.5+.3;a[i*3+2]=z}gas.geometry.attributes.position.needsUpdate=true}
+ pose(0);g.userData={body,tick:pose};return g}
+
+/* Black Blood Blatt : brute de sang noir */
+function mkBlatt(){
+ const g=new THREE.Group(),body=new THREE.Group();g.add(body);
+ const vein=veinTexC(33,512,256,40,[255,60,90]);vein.repeat.set(2,2);
+ const flesh=new THREE.MeshPhysicalMaterial({color:0x3a0710,roughness:.28,metalness:.05,clearcoat:.9,clearcoatRoughness:.2,emissive:0xff2050,emissiveMap:vein,emissiveIntensity:.8});
+ const dark=new THREE.MeshPhysicalMaterial({color:0x14050a,roughness:.3,clearcoat:.8});
+ const blob=(r,p,sc)=>{const m=new THREE.Mesh(new THREE.SphereGeometry(r,20,16),flesh);m.position.set(...p);if(sc)m.scale.set(...sc);body.add(m);return m};
+ const torso=blob(1.7,[0,3.3,0],[1.15,1,.9]);blob(1.2,[0,2,0],[1.1,1,.9]);blob(1,[-.9,4.2,-.3]);blob(1,[.9,4.2,-.3]);blob(.9,[0,4.6,-.6]);
+ const head=new THREE.Group();head.position.set(0,4.75,.55);body.add(head);
+ const hm=new THREE.Mesh(new THREE.SphereGeometry(.55,16,12),flesh);hm.scale.set(1,.85,1);head.add(hm);
+ const jaw=new THREE.Mesh(new THREE.BoxGeometry(.7,.2,.5),dark);jaw.position.set(0,-.38,.25);head.add(jaw);
+ const eyes=[];[-1,1].forEach(s=>{const e=new THREE.Mesh(new THREE.SphereGeometry(.09,8,6),new THREE.MeshBasicMaterial({color:0xffe0e8}));e.position.set(.2*s,.08,.48);head.add(e);const eg=glow(0xff3060,1.1);eg.position.copy(e.position);head.add(eg);eyes.push(eg)});
+ [-1,1].forEach(s=>{for(let k=0;k<3;k++)head.add(spike([.25*s-.1*s*k,.4,-.1-k*.2],[.3*s,1,-.6],.5-k*.1,.08,dark))});
+ const arms=[-1,1].map(s=>{const p=new THREE.Group();p.position.set(1.8*s,4.1,0);body.add(p);
+  p.add(joint([0,0,0],.75,flesh));p.add(bone([0,0,0],[.5*s,-1.4,.5],.6,.5,flesh));p.add(joint([.5*s,-1.4,.5],.5,flesh));p.add(bone([.5*s,-1.4,.5],[.45*s,-2.7,1.3],.5,.45,flesh));
+  const fist=new THREE.Mesh(new THREE.SphereGeometry(.78,16,12),flesh);fist.scale.set(1,.9,1.05);fist.position.set(.45*s,-3.05,1.55);p.add(fist);
+  for(let k=0;k<4;k++)p.add(spike([.45*s+(k-1.5)*.28,-2.6,1.9],[0,.3,1],.4,.09,dark));return[p,s]});
+ [-1,1].forEach(s=>{body.add(bone([.7*s,1.6,0],[.9*s,.8,.2],.55,.5,flesh));body.add(bone([.9*s,.8,.2],[.95*s,.15,.3],.5,.6,dark))});
+ const tents=[];for(let k=0;k<5;k++){const a=(k-2)*.45,base=[Math.sin(a)*1.1,4.3,-1.1],ms=sweepMesh(20,8,flesh);body.add(ms);tents.push({ms,base,a,k,pts:[0,1,2,3].map(()=>new THREE.Vector3())})}
+ const drips=[];for(let k=0;k<10;k++){const d=new THREE.Mesh(new THREE.SphereGeometry(.09,8,6),flesh);body.add(d);drips.push([d,(Math.random()-.5)*3,(Math.random()-.5)*1.6,Math.random()*3,.6+Math.random()])}
+ const aura=glow(0xa35cff,9);aura.position.y=3.2;aura.material.opacity=.35;body.add(aura);
+ const pl=new THREE.PointLight(0xff2050,1,12,2);pl.position.set(0,3,2);body.add(pl);
+ g.traverse(o=>{if(o.isMesh)o.castShadow=true});
+ const tf=table([[0,.28],[1,.03]]);
+ function pose(t){torso.scale.set(1.15+.03*Math.sin(t*1.8),1+.03*Math.sin(t*1.8+1),.9);
+  arms.forEach(([p,s])=>{p.rotation.x=-.12+.1*Math.sin(t*1.2+s);p.rotation.z=s*.08*Math.sin(t*1.5)});
+  tents.forEach(o=>{const {base,a,k,pts}=o;for(let j=0;j<4;j++){const u=j/3;pts[j].set(base[0]+Math.sin(a)*u*1.8+Math.sin(t*1.6+k+u*3)*u*.6,base[1]+u*1.6+Math.sin(t*1.3+k*2+u*2)*u*.5,base[2]-u*2.2)}const cv=new THREE.CatmullRomCurve3(pts);sweepUpdate(o.ms,cv,tf)});
+  drips.forEach(([d,x,z,o,v])=>{const h=((t*v+o)%3);d.position.set(x,3.5-h*1.2,z+.9);d.scale.setScalar(1-h/3.5)});
+  flesh.emissiveIntensity=.6+.35*Math.sin(t*2.6);aura.material.opacity=.25+.12*Math.sin(t*1.7);eyes.forEach(e=>e.material.opacity=.7+.3*Math.sin(t*5))}
+ pose(0);g.userData={body,tick:pose};return g}
+
+/* Terminator Bargott : ogre de feu au gantelet */
+function mkBargott(){
+ const g=new THREE.Group(),body=new THREE.Group();g.add(body);
+ const lava=veinTexC(44,512,256,45,[255,140,40],10);lava.repeat.set(2,2);
+ const skin=new THREE.MeshStandardMaterial({color:0x2a0c06,roughness:.6,metalness:.1,emissive:0xff5a1a,emissiveMap:lava,emissiveIntensity:1.2});
+ const iron=new THREE.MeshStandardMaterial({color:0x3a3634,roughness:.4,metalness:.85});
+ const rust=new THREE.MeshStandardMaterial({color:0x5a3020,roughness:.7,metalness:.5});
+ const hot=new THREE.MeshStandardMaterial({color:0x220800,emissive:0xff7a20,emissiveIntensity:1.6});
+ const belly=new THREE.Mesh(new THREE.SphereGeometry(1.9,24,18),skin);belly.scale.set(1.15,1,1.05);belly.position.set(0,2.6,.35);body.add(belly);
+ const chest=new THREE.Mesh(new THREE.SphereGeometry(1.7,20,16),skin);chest.scale.set(1.3,.9,.95);chest.position.set(0,4.2,-.1);body.add(chest);
+ const hump=new THREE.Mesh(new THREE.SphereGeometry(1.2,16,12),skin);hump.position.set(0,4.8,-.9);body.add(hump);
+ const head=new THREE.Group();head.position.set(0,5.25,.75);body.add(head);
+ const hm=new THREE.Mesh(new THREE.SphereGeometry(.6,16,12),skin);hm.scale.set(1.1,.9,1);head.add(hm);
+ const jaw=new THREE.Mesh(new THREE.BoxGeometry(1,.4,.6),skin);jaw.position.set(0,-.4,.25);head.add(jaw);
+ [-1,1].forEach(s=>{head.add(spike([.3*s,-.35,.5],[.1*s,1,.3],.4,.09,new THREE.MeshStandardMaterial({color:0xe8d8b0})));head.add(tube([[.45*s,.3,0],[.95*s,.6,-.2],[1.1*s,1.2,-.4]],.15,.01,rust,10,6))});
+ const eyes=[];[-1,1].forEach(s=>{const e=new THREE.Mesh(new THREE.SphereGeometry(.08,8,6),new THREE.MeshBasicMaterial({color:0xfff0a0}));e.position.set(.22*s,.12,.52);head.add(e);const eg=glow(0xffa030,1);eg.position.copy(e.position);head.add(eg);eyes.push(eg)});
+ const plate=new THREE.Mesh(new THREE.CylinderGeometry(2.25,2.35,1.1,14,1,true),iron);plate.material=iron;plate.position.y=1.15;body.add(plate);
+ for(let k=0;k<7;k++){const a=(k-3)*.32;body.add(spike([Math.sin(a)*2.3,1.5,Math.cos(a)*2.3],[Math.sin(a),.4,Math.cos(a)],.6,.13,iron))}
+ const chains=[];for(let k=0;k<6;k++){const c=new THREE.Mesh(new THREE.TorusGeometry(.12,.035,6,10),rust);body.add(c);chains.push([c,k])}
+ [-1,1].forEach(s=>{body.add(bone([1.1*s,1,0],[1.3*s,.2,.3],.75,.7,skin));const ft=new THREE.Mesh(new THREE.SphereGeometry(.75,14,10),skin);ft.scale.set(1,.5,1.3);ft.position.set(1.3*s,.25,.5);body.add(ft)});
+ const armL=new THREE.Group();armL.position.set(2.1,4.4,0);body.add(armL);
+ armL.add(joint([0,0,0],.8,skin));armL.add(bone([0,0,0],[.6,-1.6,.4],.6,.5,skin));armL.add(bone([.6,-1.6,.4],[.7,-3,.8],.5,.45,skin));const fl=new THREE.Mesh(new THREE.SphereGeometry(.55,12,10),skin);fl.position.set(.7,-3.3,.9);armL.add(fl);
+ const armR=new THREE.Group();armR.position.set(-2.2,4.4,0);body.add(armR);
+ armR.add(joint([0,0,0],.95,iron));armR.add(spike([-.3,.6,0],[-.5,1,0],.9,.2,iron));armR.add(spike([-.5,.3,.4],[-.8,.6,.4],.7,.16,iron));
+ armR.add(bone([0,0,0],[-.6,-1.6,.5],.7,.65,iron));
+ const gaunt=new THREE.Group();gaunt.position.set(-.7,-2.5,.9);armR.add(gaunt);
+ const gc=new THREE.Mesh(new THREE.CylinderGeometry(.85,1,2.2,12),iron);gc.rotation.x=.35;gaunt.add(gc);
+ for(let k=0;k<4;k++){const r=new THREE.Mesh(new THREE.TorusGeometry(.95-k*.02,.08,6,20),k%2?rust:hot);r.rotation.x=Math.PI/2+.35;r.position.set(0,.8-k*.45,-.25+k*.16);gaunt.add(r)}
+ const fist=new THREE.Mesh(new THREE.BoxGeometry(1.5,1.1,1.4),iron);fist.position.set(0,-1.35,.45);fist.rotation.x=.35;gaunt.add(fist);
+ for(let k=0;k<4;k++)gaunt.add(spike([(k-1.5)*.35,-1.3,1.15],[0,0,1],.45,.1,iron));
+ const core=glow(0xff8a2a,2.2);core.position.set(0,0,.6);gaunt.add(core);
+ const fire=partsCloud(110,0xff7a20,.7,()=>[(Math.random()-.5)*4.5,Math.random()*5,(Math.random()-.5)*3,.8+Math.random()*1.4]);body.add(fire);
+ const fire2=partsCloud(50,0xffd060,.35,()=>[(Math.random()-.5)*3,Math.random()*5,(Math.random()-.5)*2,1+Math.random()*1.5]);body.add(fire2);
+ const pl=new THREE.PointLight(0xff7a20,1.6,16,2);pl.position.set(0,3.5,2);body.add(pl);
+ const ground=new THREE.Mesh(new THREE.CircleGeometry(3,32).rotateX(-Math.PI/2),new THREE.MeshBasicMaterial({color:0xff5a1a,transparent:true,opacity:.18,depthWrite:false}));ground.position.y=.05;g.add(ground);
+ g.traverse(o=>{if(o.isMesh&&o!==ground)o.castShadow=true});
+ function pose(t){const br=Math.sin(t*1.5);belly.scale.set(1.15+.04*br,1+.03*br,1.05+.04*br);armR.rotation.x=-.1+.08*Math.sin(t*1.1);armL.rotation.x=-.15+.1*Math.sin(t*1.3+1);head.rotation.y=.12*Math.sin(t*.6);
+  chains.forEach(([c,k])=>{const a=-1.2+k*.5;c.position.set(Math.sin(a)*2.32,.75-.12*Math.sin(t*2+k),Math.cos(a)*2.32);c.rotation.y=a});
+  skin.emissiveIntensity=1+.35*Math.sin(t*3.1)+(Math.random()<.04?.5:0);hot.emissiveIntensity=1.3+.5*Math.sin(t*4);core.material.opacity=.6+.4*Math.sin(t*3);
+  [fire,fire2].forEach(f=>{const sd=f.userData.seed,a=f.userData.arr;for(let i=0;i<sd.length;i++){const [x,y,z,v]=sd[i],h=(y+t*v)%5.5;a[i*3]=x*(1-h/9)+Math.sin(t*2+i)*.15;a[i*3+1]=h+1;a[i*3+2]=z*(1-h/9)}f.geometry.attributes.position.needsUpdate=true});
+  eyes.forEach(e=>e.material.opacity=.7+.3*Math.sin(t*5))}
+ pose(0);g.userData={body,tick:pose};return g}
+const BOSSES={klawfly:mkKlawfly(),blatt:mkBlatt(),bargott:mkBargott()};
+const BCAM={klawfly:[12,5,2.6],blatt:[11,5.5,3.2],bargott:[12.5,6,3.4]};
+
+Object.values(BOSSES).forEach(b=>{b.visible=false;scene.add(b)});
+const stunLbl=textSprite('KO','#f2cf3c','rgba(11,10,14,.85)',1.1);stunLbl.visible=false;scene.add(stunLbl);
+const stars=new THREE.Group();for(let i=0;i<5;i++){const s=glow(0xf2cf3c,.9);s.position.set(Math.sin(i*1.26)*1.4,0,Math.cos(i*1.26)*1.4);stars.add(s)}stars.visible=false;scene.add(stars);
+
+/* players — personnages par classe (Daeva), animés */
+const SKIN=0xf1d2b6,HAIR=[0x2a1d14,0xd8c08a,0x5a2a1a,0xe8e2d8,0x1a1a24,0x8a4a2a,0xb05a3a,0x3a3a50];
+const PMAT={};const pmat=(c,o={})=>{const k=c+JSON.stringify(o);return PMAT[k]||(PMAT[k]=new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.6,metalness:.15},o)))};
+const featherShape=new THREE.Shape();featherShape.moveTo(0,0);featherShape.quadraticCurveTo(.09,.5,0,1);featherShape.quadraticCurveTo(-.09,.5,0,0);
+const featherGeo=new THREE.ShapeGeometry(featherShape,5);
+const KIT={tank:[0x8d93a3,0x2c3a5c,'Gardien'],gladi:[0x6e4d33,0xa3a9b6,'Gladiateur'],cleric:[0xece5d2,0xc9a050,'Clerc'],aede:[0x2f6a4a,0xd8c08a,'Aède'],assassin:[0x26212c,0x7a1c2c,'Assassin'],ranger:[0x3d5a2c,0x7a5a3a,'Rôdeur'],sorc:[0x3a2a6a,0x8fd3bf,'Sorcier']};
+function mkPlayer(role,name,kind,idx){
+ const g=new THREE.Group(),col=C[role],rig=new THREE.Group();g.add(rig);
+ const [c0,c1]=KIT[kind],armor=kind==='tank'||kind==='gladi';
+ const main=pmat(c0,{metalness:armor?.75:.12,roughness:armor?.32:.65}),acc=pmat(c1,{metalness:.55,roughness:.38}),skin=pmat(SKIN,{roughness:.75}),dark=pmat(0x18161e,{roughness:.6}),roleM=pmat(col,{emissive:col,emissiveIntensity:.45});
+ const robe=kind==='cleric'||kind==='aede'||kind==='sorc';
+ const legs=[-1,1].map(s=>{const p=new THREE.Group();p.position.set(.12*s,.76,0);rig.add(p);const l=new THREE.Mesh(new THREE.CylinderGeometry(.095,.08,.6,8),robe?dark:main);l.position.y=-.32;p.add(l);const b=new THREE.Mesh(new THREE.BoxGeometry(.15,.13,.27),armor?acc:dark);b.position.set(0,-.68,.05);p.add(b);return p});
+ const torso=new THREE.Group();torso.position.y=.76;rig.add(torso);
+ const ch=new THREE.Mesh(new THREE.CylinderGeometry(.25,.19,.6,10),main);ch.position.y=.33;torso.add(ch);
+ const belt=new THREE.Mesh(new THREE.CylinderGeometry(.205,.205,.08,10),roleM);belt.position.y=.07;torso.add(belt);
+ if(robe){const sk=new THREE.Mesh(new THREE.CylinderGeometry(.21,.4,.74,12,1,true),pmat(c0,{side:THREE.DoubleSide,roughness:.75}));sk.position.y=-.33;torso.add(sk);const hem=new THREE.Mesh(new THREE.TorusGeometry(.39,.025,6,20),acc);hem.rotation.x=Math.PI/2;hem.position.y=-.69;torso.add(hem)}
+ else{const sk=new THREE.Mesh(new THREE.CylinderGeometry(.2,.27,.26,10,1,true),pmat(c1,{side:THREE.DoubleSide}));sk.position.y=-.08;torso.add(sk)}
+ const arms=[-1,1].map(s=>{const p=new THREE.Group();p.position.set(.31*s,.57,0);torso.add(p);const a=new THREE.Mesh(new THREE.CylinderGeometry(.072,.062,.5,8),main);a.position.y=-.25;p.add(a);const h=new THREE.Mesh(new THREE.SphereGeometry(.072,8,6),armor?acc:skin);h.position.y=-.52;p.add(h);const sh=new THREE.Mesh(new THREE.SphereGeometry(armor?.15:.11,10,8),armor?acc:main);sh.scale.y=armor?.8:1;p.add(sh);const hand=new THREE.Group();hand.position.y=-.53;p.add(hand);p.userData.hand=hand;return p});
+ const armR=arms[0],armL=arms[1];
+ const head=new THREE.Group();head.position.y=.98;torso.add(head);
+ head.add(new THREE.Mesh(new THREE.SphereGeometry(.21,16,12),skin));
+ const hairM=pmat(HAIR[idx%HAIR.length],{roughness:.85});
+ const hair=new THREE.Mesh(new THREE.SphereGeometry(.225,14,10,0,Math.PI*2,0,Math.PI*.56),hairM);hair.rotation.x=-.3;head.add(hair);
+ if(idx%2){const tail=new THREE.Mesh(new THREE.ConeGeometry(.08,.42,6),hairM);tail.position.set(0,-.12,-.22);tail.rotation.x=-.5;head.add(tail)}
+ [-1,1].forEach(s=>{const e=new THREE.Mesh(new THREE.SphereGeometry(.03,6,5),dark);e.position.set(.075*s,0,.195);head.add(e)});
+ const R=armR.userData.hand,L=armL.userData.hand;let orb=null;
+ const metal=pmat(0xd8dde6,{metalness:.9,roughness:.2}),wood=pmat(0x5a3a22,{roughness:.8});
+ const blade=(len,w)=>{const b=new THREE.Group(),m=new THREE.Mesh(new THREE.BoxGeometry(w,len,.025),metal);m.position.y=len/2+.12;b.add(m);const tp=new THREE.Mesh(new THREE.ConeGeometry(w*.72,w*1.6,4),metal);tp.scale.z=.2;tp.position.y=len+.12+w*.8;b.add(tp);const gd=new THREE.Mesh(new THREE.BoxGeometry(w*3.2,.04,.07),acc);gd.position.y=.1;b.add(gd);const gr=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,.16,6),dark);b.add(gr);return b};
+ armR.userData.base=[0,0,0];armL.userData.base=[0,0,0];
+ if(kind==='tank'){const hl=new THREE.Mesh(new THREE.SphereGeometry(.245,14,10,0,Math.PI*2,0,Math.PI*.62),main);hl.rotation.x=-.15;head.add(hl);const cr=new THREE.Mesh(new THREE.BoxGeometry(.04,.16,.32),roleM);cr.position.set(0,.24,-.02);head.add(cr);
+  const sh=new THREE.Group(),sb=new THREE.Mesh(new THREE.CylinderGeometry(.3,.3,.06,6).rotateX(Math.PI/2),acc);sb.scale.set(1,1.25,1);sh.add(sb);const em=new THREE.Mesh(new THREE.CircleGeometry(.12,6),roleM);em.position.z=.035;sh.add(em);sh.position.set(.06,-.05,.14);L.add(sh);
+  const sw=blade(.62,.06);sw.rotation.x=Math.PI/2.3;R.add(sw);armR.userData.base=[-.5,0,0];armL.userData.base=[-.7,0,-.25]}
+ if(kind==='gladi'){const sw=blade(1.05,.1);sw.rotation.x=Math.PI/2.8;R.add(sw);armR.userData.base=[-.6,0,.25];armL.userData.base=[-.6,0,-.25];
+  const bn=new THREE.Mesh(new THREE.TorusGeometry(.215,.035,6,20),roleM);bn.rotation.x=Math.PI/2;bn.position.y=.07;head.add(bn)}
+ if(kind==='cleric'){const ci=new THREE.Mesh(new THREE.TorusGeometry(.215,.025,6,20),acc);ci.rotation.x=Math.PI/2.2;ci.position.y=.09;head.add(ci);
+  const mc=new THREE.Group(),hd=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,.55,6),acc);hd.position.y=.2;const bl=new THREE.Mesh(new THREE.IcosahedronGeometry(.1,0),pmat(0xf2cf3c,{emissive:0xf2cf3c,emissiveIntensity:.8,metalness:.6}));bl.position.y=.5;mc.add(hd,bl,glow(0xfff2b0,.8));mc.children[2].position.y=.5;mc.rotation.x=.6;R.add(mc);armR.userData.base=[-.35,0,0];
+  const bk=new THREE.Mesh(new THREE.BoxGeometry(.2,.26,.07),pmat(0x7a1c1c));bk.position.set(0,-.02,.1);L.add(bk);armL.userData.base=[-.6,0,-.15]}
+ if(kind==='aede'){const st=new THREE.Group(),sh=new THREE.Mesh(new THREE.CylinderGeometry(.025,.03,1.5,6),wood);sh.position.y=.35;const cr=new THREE.Mesh(new THREE.TorusGeometry(.13,.025,6,16,Math.PI*1.4),acc);cr.position.y=1.15;const ob=new THREE.Mesh(new THREE.SphereGeometry(.07,10,8),pmat(0x7dffb0,{emissive:0x3fd77a,emissiveIntensity:1}));ob.position.y=1.15;const gl=glow(0x7dffb0,.9);gl.position.y=1.15;st.add(sh,cr,ob,gl);st.rotation.x=.12;R.add(st);armR.userData.base=[-.3,0,0];
+  [-1,1].forEach(s=>{const rb=new THREE.Mesh(new THREE.PlaneGeometry(.06,.5),pmat(col,{side:THREE.DoubleSide,emissive:col,emissiveIntensity:.3}));rb.position.set(.12*s,-.1,-.2);rb.rotation.x=.3;head.add(rb)})}
+ if(kind==='assassin'){const hood=new THREE.Mesh(new THREE.SphereGeometry(.25,14,10,Math.PI/2+.7,Math.PI*2-1.4,0,Math.PI*.62),pmat(c0,{side:THREE.DoubleSide,roughness:.8}));head.add(hood);const sc=new THREE.Mesh(new THREE.CylinderGeometry(.16,.2,.1,10),roleM);sc.position.y=-.16;head.add(sc);
+  [R,L].forEach((h,k)=>{const d=new THREE.Mesh(new THREE.ConeGeometry(.035,.36,4),metal);d.position.set(0,0,.18);d.rotation.x=Math.PI/2;h.add(d)});armR.userData.base=[-.8,0,.2];armL.userData.base=[-.8,0,-.2]}
+ if(kind==='ranger'){const cap=new THREE.Mesh(new THREE.ConeGeometry(.24,.3,10),pmat(c0));cap.position.y=.17;cap.rotation.x=-.35;head.add(cap);
+  const bow=new THREE.Mesh(new THREE.TorusGeometry(.42,.022,6,20,Math.PI).rotateZ(Math.PI).rotateY(Math.PI/2),wood);L.add(bow);const str=new THREE.Mesh(new THREE.CylinderGeometry(.004,.004,.84,4).rotateX(Math.PI/2),pmat(0xe8e2d8));L.add(str);armL.userData.base=[-1.3,0,-.1];armR.userData.base=[-1.1,0,.2];
+  const qv=new THREE.Mesh(new THREE.CylinderGeometry(.08,.07,.45,8),wood);qv.position.set(.1,.4,-.24);qv.rotation.z=-.4;torso.add(qv);for(let k=0;k<3;k++){const ar=new THREE.Mesh(new THREE.ConeGeometry(.03,.08,4),roleM);ar.position.set(.18+k*.025,.66,-.24-k*.02);ar.rotation.z=-.4;torso.add(ar)}}
+ if(kind==='sorc'){const hat=new THREE.Mesh(new THREE.ConeGeometry(.2,.5,12),pmat(c0));hat.position.set(0,.3,-.04);hat.rotation.x=-.25;head.add(hat);const brim=new THREE.Mesh(new THREE.TorusGeometry(.24,.04,6,20),pmat(c0));brim.rotation.x=Math.PI/2;brim.position.y=.1;head.add(brim);
+  orb=new THREE.Group();const o=new THREE.Mesh(new THREE.SphereGeometry(.09,12,10),pmat(0xd8b8ff,{emissive:0xa35cff,emissiveIntensity:1.2}));orb.add(o,glow(0xb48cff,1));torso.add(orb);armR.userData.base=[-.9,0,.1];
+  const bk=new THREE.Mesh(new THREE.BoxGeometry(.22,.28,.08),pmat(0x2a1a4a,{emissive:0x5a2aa0,emissiveIntensity:.3}));bk.position.set(0,0,.1);L.add(bk);armL.userData.base=[-.7,0,-.1]}
+ /* ailes de Daeva */
+ const wm=pmat(0xf4f0ff,{emissive:col,emissiveIntensity:.55,transparent:true,opacity:.88,side:THREE.DoubleSide,roughness:.5});
+ const wings=[-1,1].map(s=>{const p=new THREE.Group();p.position.set(.08*s,.48,-.2);torso.add(p);const w=new THREE.Group();if(s<0)w.scale.x=-1;p.add(w);
+  for(let k=0;k<5;k++){const f=new THREE.Mesh(featherGeo,wm),a=(15+k*16)*deg,L2=.4+k*.06;f.scale.set(1.2,L2,1);f.rotation.z=-Math.PI/2+a;f.position.set(Math.cos(a)*.05,Math.sin(a)*.05,0);w.add(f)}return[p,s]});
+ const base=new THREE.Mesh(new THREE.RingGeometry(.45,.6,24).rotateX(-Math.PI/2),mat(col,.8));base.position.y=.03;g.add(base);
+ const aura=new THREE.Mesh(new THREE.CircleGeometry(.9,24).rotateX(-Math.PI/2),mat(0xffffff,.5));aura.position.y=.025;aura.visible=false;g.add(aura);
+ const hurt=glow(0xff3b3b,3);hurt.position.y=1;hurt.visible=false;g.add(hurt);
+ const shield=new THREE.Mesh(new THREE.SphereGeometry(1.1,16,12),new THREE.MeshBasicMaterial({color:0xf2cf3c,transparent:true,opacity:.35,wireframe:true}));shield.position.y=.95;shield.visible=false;g.add(shield);
+ const lbl=textSprite(name,'#'+col.toString(16).padStart(6,'0'),'rgba(11,10,14,.72)',.75);lbl.position.y=2.35;g.add(lbl);
+ rig.traverse(o=>{if(o.isMesh&&o.material!==wm)o.castShadow=true});
+ rig.scale.setScalar(1.08);
+ function anim(t,spd,air){const sw=Math.min(1,spd/5),ph=t*11+idx;
+  const lg=air?[-.9,.5]:[Math.sin(ph)*.85*sw,-Math.sin(ph)*.85*sw];legs[0].rotation.x=lg[0];legs[1].rotation.x=lg[1];
+  [armR,armL].forEach((a,k)=>{const b=a.userData.base,sgn=k?1:-1;a.rotation.set(b[0]*(1-sw*.6)+(air?-1.1:sgn*Math.sin(ph)*.7*sw),b[1],b[2]+(air?(k?-.5:.5):0))});
+  torso.rotation.x=sw*.18;rig.position.y=Math.abs(Math.sin(ph))*.07*sw+.02*Math.sin(t*2.4+idx);head.rotation.y=.15*Math.sin(t*.7+idx*1.7)*(1-sw);
+  const fl=air?1.1:.35;wings.forEach(([p,s])=>{p.rotation.y=s*(.55+fl*.35*Math.sin(t*(air?14:3)+idx));p.rotation.z=s*.15});
+  if(orb)orb.position.set(-.45+.06*Math.sin(t*2+idx),.75+.1*Math.sin(t*3+idx),.25)}
+ anim(0,0,false);
+ g.userData={role,name,col,aura,hurt,shield,lbl,anim,kind:KIT[kind][2]};return g}
+const ROLES10=[['tank','T','tank'],['heal','H1','cleric'],['heal','H2','aede'],['dps','D1','assassin'],['dps','D2','gladi'],['dps','D3','ranger'],['dps','D4','sorc'],['dps','D5','ranger'],['dps','D6','sorc'],['dps','D7','assassin']];
+const ROLES5=[['tank','T','tank'],['heal','AE','aede'],['heal','CL','cleric'],['dps','D1','assassin'],['dps','D2','ranger']];
+const P10=ROLES10.map(([r,n,k],i)=>mkPlayer(r,n,k,i)),P5=ROLES5.map(([r,n,k],i)=>mkPlayer(r,n,k,i+3));[...P10,...P5].forEach(p=>{p.visible=false;scene.add(p)});
+
+const pol=(r,a)=>[r*Math.sin(a*deg),r*Math.cos(a*deg)];
+const OFF=[[0,0],[1,.4],[-1,.4],[.55,-.9],[-.55,-.9],[1.7,-.5],[-1.7,-.5],[0,1.3],[1.3,1.4],[-1.3,1.4]];
+const stack=(x,z,n=5)=>OFF.slice(0,n).map(([a,b])=>[x+a,z+b]);
+const ss=x=>x<=0?0:x>=1?1:x*x*(3-2*x),clamp01=x=>Math.max(0,Math.min(1,x));
+function samplePath(path,t){if(t<=path[0].t)return path[0];
+ for(let k=1;k<path.length;k++){const a=path[k-1],b=path[k];if(t<=b.t){const u=b.t>a.t?ss((t-a.t)/(b.t-a.t)):1;return{x:a.x+(b.x-a.x)*u,z:a.z+(b.z-a.z)*u,yaw:a.yaw!=null&&b.yaw!=null?a.yaw+(b.yaw-a.yaw)*u:b.yaw,y:(b.arc||0)*Math.sin(Math.PI*u)}}}
+ const l=path[path.length-1];return{x:l.x,z:l.z,yaw:l.yaw,y:0}}
+const dyn=new THREE.Group();scene.add(dyn);
+function clearDyn(){dyn.traverse(o=>{if(o.geometry)o.geometry.dispose()});dyn.clear()}
+function shapeGeo(type,o){
+ if(type==='circle')return new THREE.CircleGeometry(o.r,64).rotateX(-Math.PI/2);
+ if(type==='ring')return new THREE.RingGeometry(o.r0,o.r1,96).rotateX(-Math.PI/2);
+ if(type==='sector'){const h=o.ang/2*deg;return new THREE.CircleGeometry(o.r,48,-Math.PI/2-h,2*h).rotateX(-Math.PI/2)}
+ if(type==='arc'){const h=o.ang/2*deg;return new THREE.RingGeometry(o.r0,o.r1,48,1,-Math.PI/2-h,2*h).rotateX(-Math.PI/2)}
+ if(type==='rect')return new THREE.PlaneGeometry(o.w,o.l).rotateX(-Math.PI/2).translate(0,0,o.l/2);
+ if(type==='box')return new THREE.PlaneGeometry(o.w,o.d).rotateX(-Math.PI/2);
+ if(type==='frame'){const s=new THREE.Shape();s.moveTo(-o.h1,-o.h1);s.lineTo(o.h1,-o.h1);s.lineTo(o.h1,o.h1);s.lineTo(-o.h1,o.h1);s.closePath();const h=new THREE.Path();h.moveTo(-o.h0,-o.h0);h.lineTo(-o.h0,o.h0);h.lineTo(o.h0,o.h0);h.lineTo(o.h0,-o.h0);h.closePath();s.holes.push(h);return new THREE.ShapeGeometry(s).rotateX(-Math.PI/2)}
+ if(type==='tri'){const s=new THREE.Shape();s.moveTo(0,-o.l);s.lineTo(o.w/2,0);s.lineTo(-o.w/2,0);s.closePath();return new THREE.ShapeGeometry(s).rotateX(Math.PI/2)}
+}
+
+/* scheme engine */
+let S=null,cur=null,time=0,playing=true,speed=1,labelsOn=true,capIdx=-1;
+function makeS(sc){
+ const party=sc.party===5?P5:P10;
+ const st={party,paths:[],jumps:[],teles:[],updates:[],hurts:[],auras:[],shields:[],icons:[],bossPath:null,boss:BOSSES[sc.boss],gaugeFn:null,stun:null,waves:[],face:null,bossHide:null};
+ const start=sc.start;party.forEach((p,i)=>{st.paths[i]=[{t:0,x:start[i][0],z:start[i][1]}];st.jumps[i]=[]});
+ const b0=sc.bossStart||{x:0,z:0,yaw:0};st.bossPath=[{t:0,x:b0.x,z:b0.z,yaw:b0.yaw*deg}];
+ const api={
+  m(i,t0,t1,x,z){const p=st.paths[i],l=p[p.length-1];p.push({t:t0,x:l.x,z:l.z},{t:t1,x,z})},
+  tp(i,t,x,z){const p=st.paths[i],l=p[p.length-1];p.push({t,x:l.x,z:l.z},{t:t+.02,x,z})},
+  jump(i,t){st.jumps[i].push(t)},
+  bm(t0,t1,x,z,yaw,arc){const p=st.bossPath,l=p[p.length-1];p.push({t:t0,x:l.x,z:l.z,yaw:l.yaw},{t:t1,x,z,yaw:yaw*deg,arc:arc||0})},
+  btp(t,x,z,yaw){const p=st.bossPath,l=p[p.length-1];p.push({t,x:l.x,z:l.z,yaw:l.yaw},{t:t+.02,x,z,yaw:yaw*deg})},
+  pos(i,t){return samplePath(st.paths[i],t)},bpos(t){return samplePath(st.bossPath,t)},
+  add(o){dyn.add(o);return o},
+  tele(type,o,a,b,c){const grp=new THREE.Group(),base=new THREE.Mesh(shapeGeo(type,o),mat(o.color,.18)),fill=new THREE.Mesh(shapeGeo(type,o),mat(o.color,.32));grp.add(base,fill);grp.position.y=o.y||.04+(st.teles.length%6)*.004;dyn.add(grp);st.teles.push({grp,base,fill,type,o,a,b,c});return grp},
+  zone(type,o,a,c){return api.tele(type,Object.assign({zone:true},o),a,c,c)},
+  hurt(i,t){st.hurts.push([i,t])},aura(i,color,t0,t1){st.auras.push([i,color,t0,t1==null?1e9:t1])},
+  shield(i,t0,t1){st.shields.push([i,t0,t1])},
+  icon(i,color,t0,t1,txt){const g=new THREE.Group();g.add(new THREE.Mesh(new THREE.SphereGeometry(.28,12,10),new THREE.MeshBasicMaterial({color})),glow(color,1.8));if(txt){const l=textSprite(txt,'#'+color.toString(16).padStart(6,'0'),'rgba(11,10,14,.8)',.7);l.position.y=.75;g.add(l)}dyn.add(g);st.icons.push([g,i,t0,t1])},
+  wave(o,ts,sp,opt={}){const ring=new THREE.Mesh(new THREE.RingGeometry(.5,1,96).rotateX(-Math.PI/2),mat(opt.color||C.kd,.8));ring.position.y=.07;dyn.add(ring);let lr=-1;const max=opt.max||40;
+   st.updates.push(t=>{const r=1+(t-ts)*sp;if(t<ts||r>max){ring.visible=false;return}ring.visible=true;const at=typeof o==='function'?o(t):o;ring.position.x=at[0];ring.position.z=at[1];const rr=Math.round(r*20)/20;if(rr!==lr){lr=rr;ring.geometry.dispose();ring.geometry=new THREE.RingGeometry(Math.max(.01,rr-.35),rr+.35,96).rotateX(-Math.PI/2)}});
+   if(opt.jump!==false)st.waves.push({o,ts,sp,ex:opt.exclude||[],max})},
+  gauge(fn){st.gaugeFn=fn},stun(t0,t1){st.stun=[t0,t1]},update(fn){st.updates.push(fn)},face(fn){st.face=fn},bossHide(fn){st.bossHide=fn},
+  orb(color,r=.6){const g=new THREE.Group();g.add(new THREE.Mesh(new THREE.SphereGeometry(r,20,14),new THREE.MeshBasicMaterial({color})),glow(color,r*6));dyn.add(g);return g},
+  label(txt,x,z,y=3,color='#ece5d7'){const l=textSprite(txt,color,'rgba(11,10,14,.78)',.85);l.position.set(x,y,z);dyn.add(l);st.updates.push(()=>{l.visible=labelsOn});return l},
+  glow,textSprite,mat,
+ };
+ sc.build(api);
+ // auto jumps over waves
+ st.waves.forEach(w=>{party.forEach((p,i)=>{if(w.ex.includes(i))return;let prev=null;for(let t=w.ts;t<w.ts+w.max/w.sp;t+=.02){const q=samplePath(st.paths[i],t),at=typeof w.o==='function'?w.o(t):w.o,d=Math.hypot(q.x-at[0],q.z-at[1])-(1+(t-w.ts)*w.sp);if(prev!==null&&prev>0&&d<=0){st.jumps[i].push(t-.3);break}prev=d}})});
+ return st}
+function teleUpdate(T,t){const {grp,base,fill,type,o,a,b,c}=T;
+ if(t<a||t>c+(o.zone?0:.6)){grp.visible=false;return}grp.visible=true;
+ const at=typeof o.at==='function'?o.at(t):(o.at||[0,0]);grp.position.x=at[0];grp.position.z=at[1];
+ if(o.yaw!=null)grp.rotation.y=(typeof o.yaw==='function'?o.yaw(t):o.yaw)*deg;
+ if(o.zone){base.material.opacity=(o.op||.22)+.05*Math.sin(t*4);fill.visible=false;return}
+ if(t<b){const p=clamp01((t-a)/(b-a));base.material.opacity=.14+.06*Math.sin(t*10);fill.visible=true;fill.material.opacity=.3;
+  if(type==='rect')fill.scale.set(1,1,Math.max(.001,p));else if(type==='ring'||type==='frame'||type==='box'||type==='arc'){fill.scale.set(1,1,1);fill.material.opacity=.08+.32*p}else fill.scale.set(Math.max(.001,p),1,Math.max(.001,p))}
+ else{const q=clamp01((t-b)/.6);fill.visible=true;fill.scale.set(1,1,1);fill.material.opacity=.85*(1-q);base.material.opacity=.4*(1-q)}}
+
+const capEl=$('#simCap'),stepsEl=$('#steps'),gaugeEl=$('#gauge'),gaugeLbl=$('#gaugeLbl'),gaugeFill=$('#gaugeFill');
+function applyFrame(t){const st=S,sc=cur;
+ const bq=samplePath(st.bossPath,t);
+ st.party.forEach((p,i)=>{const q=samplePath(st.paths[i],t);let y=0;for(const tj of st.jumps[i])if(t>=tj&&t<=tj+.6)y=Math.max(y,1.7*Math.sin(Math.PI*(t-tj)/.6));
+  p.position.set(q.x,y,q.z);{const q0=samplePath(st.paths[i],Math.max(0,t-.06));const sp=t<.06?0:Math.hypot(q.x-q0.x,q.z-q0.z)/.06;p.userData.anim(t,sp>40?0:sp,y>.05)}const fy=st.face&&st.face(i,t,q);p.rotation.y=fy!=null?fy:Math.atan2(bq.x-q.x,bq.z-q.z);
+  p.userData.lbl.visible=labelsOn;let h=false;for(const [hi,ht] of st.hurts)if(hi===i&&t>=ht&&t<ht+.7)h=true;p.userData.hurt.visible=h;
+  let au=null;for(const [ai,col,t0,t1] of st.auras)if(ai===i&&t>=t0&&t<t1)au=col;p.userData.aura.visible=!!au;if(au)p.userData.aura.material.color.setHex(au);
+  let sh=false;for(const [si,t0,t1] of st.shields)if(si===i&&t>=t0&&t<t1)sh=true;p.userData.shield.visible=sh;if(sh)p.userData.shield.rotation.y=t*2});
+ st.icons.forEach(([g,i,t0,t1])=>{g.visible=t>=t0&&t<t1;if(g.visible){const q=samplePath(st.paths[i],t);g.position.set(q.x,3,q.z)}});
+ const boss=st.boss;boss.position.set(bq.x,bq.y*3,bq.z);boss.rotation.y=bq.yaw||0;boss.visible=!(st.bossHide&&st.bossHide(t));
+ const stn=st.stun&&t>=st.stun[0]&&t<st.stun[1];boss.userData.body.rotation.z=stn?.18*Math.sin(t*3):0;boss.userData.body.rotation.x=stn?.15:0;
+ stunLbl.visible=stars.visible=!!stn&&boss.visible;if(stn){stunLbl.position.set(bq.x,7.6,bq.z);stars.position.set(bq.x,5.8,bq.z);stars.rotation.y=t*2}
+ st.teles.forEach(T=>teleUpdate(T,t));st.updates.forEach(fn=>fn(t,st));
+ const g=st.gaugeFn&&st.gaugeFn(t);if(g){gaugeEl.hidden=false;gaugeLbl.textContent=g[0];gaugeFill.style.width=clamp01(g[1])*100+'%';gaugeFill.style.background=g[2]||''}else gaugeEl.hidden=true;
+ let k=0;sc.steps.forEach(([ts],i)=>{if(t>=ts)k=i});if(capIdx!==k){capIdx=k;capEl.textContent=sc.steps[k][1];[...stepsEl.children].forEach((li,i)=>li.classList.toggle('cur',i===k))}}
+
+/* ===== scenarios ===== */
+const SC=[];const def=o=>SC.push(o);
+const M=(m)=>'media/'+m+'.mp4';
+const NUM=['T','1','2','3','4','5','6','7','8','D7'];
+const POIS=0x9be15d,FIRE=0xff7a20;
+const ring10=(r,off=18)=>Array.from({length:10},(_,i)=>pol(i?r:4.6,i?i*36+off:0));
+function circlePath(s,i,cx,cz,r,t0,t1,step=.35,ph=0){let tt=t0;for(let t=t0+step;t<=t1+1e-6;t+=step){const a=ph+(t-t0)*2.2;s.m(i,tt,t,cx+Math.sin(a)*r,cz+Math.cos(a)*r);tt=t}}
+
+/* ---------- KLAWFLY (arène ronde, spawn en bas) ---------- */
+def({id:'klaw-pluie',grp:'klaw',boss:'klawfly',gate:'Klawfly · attaque 1',name:'Pluie de poison',dur:9,arena:'circle',clip:'boss-1-attaque-pluie',
+ start:ring10(10),
+ steps:[[0,'Klawfly plante ses mandibules dans le sol puis les lève : le poison arrive.'],[.6,'Le raid est réparti sur toute la carte, jamais à deux au même endroit.'],[1.2,'Chaque flaque tombe sur un joueur : 1 stack de poison et gros dégâts.'],[2.2,'Pas besoin de courir partout : de petits cercles sur place suffisent.']],
+ build(s){s.label('SPAWN',0,R+1.5,1,'#ff8d6b');ring10(10).forEach(([x,z],i)=>circlePath(s,i,x,z,1.5,.6,8.6,.35,i));
+  for(let w=0;w<4;w++){const ts=1.2+w*1.7;for(let i=0;i<10;i++){const q=s.pos(i,ts);s.tele('circle',{r:1.3,color:POIS,at:[q.x,q.z]},ts,ts+1.1,ts+1.1);s.zone('circle',{r:1.3,color:0x4a7a2a,at:[q.x,q.z],op:.45},ts+1.1,ts+2.4)}}}});
+def({id:'klaw-toiles',grp:'klaw',boss:'klawfly',gate:'Klawfly · attaque 2',name:'Toiles',dur:9,arena:'circle',clip:'boss-1-attaque-toile',
+ start:ring10(8,0).map(([x,z])=>[x*.9,z*.9+3]),
+ steps:[[0,'Klawfly saute sur un bord de la carte.'],[1.5,'Une zone de poison apparaît sous lui.'],[2,'Il agrippe tout le raid avec ses fils et le tire vers le poison.'],[2.4,'Courez ou dashez dans le sens opposé pour ne pas finir dedans.'],[5,'À partir de 50 % : une zone rouge au bout de chaque fil. Ne vous stackez pas.']],
+ build(s){s.bm(.4,1.4,0,-13,0,1.4);s.zone('circle',{r:5,color:POIS,at:[0,-13],op:.4},1.5,9);
+  const st=ring10(8,0).map(([x,z])=>[x*.9,z*.9+3]);st.forEach(([x,z],i)=>{const px=x+(0-x)*.28,pz=z+(-13-z)*.28;s.m(i,2,3,px,pz);s.m(i,3.1,4.6,x*1.05,z+1.5)});
+  const lines=st.map(()=>{const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]);const l=new THREE.Line(g,new THREE.LineBasicMaterial({color:0xe8f2e0,transparent:true,opacity:.8}));s.add(l);return l});
+  s.update(t=>lines.forEach((l,i)=>{l.visible=t>=2&&t<4.8;const q=s.pos(i,t),a=l.geometry.attributes.position;a.setXYZ(0,0,2.8,-11.2);a.setXYZ(1,q.x,1,q.z);a.needsUpdate=true}));
+  for(let i=0;i<10;i++){const q=s.pos(i,5);s.tele('circle',{r:2,color:C.death,at:[q.x,q.z]},5,6.6,6.6)}}});
+def({id:'klaw-laser',grp:'klaw',boss:'klawfly',gate:'Klawfly · attaque 4 (après 75 %)',name:'Laser',dur:7,arena:'circle',clip:'boss-1-attaque-laser',
+ start:[pol(4,0),pol(8,60),pol(8,300),pol(4,40),pol(4,320),pol(9,110),pol(9,250),pol(5,150),pol(5,210),pol(10,180)],
+ steps:[[0,'Klawfly tourne sur lui-même : le laser arrive.'],[.4,'Tout le monde passe derrière lui.'],[1.6,'Laser droit devant…'],[3,'…puis il pivote de 90°, d\'un côté qu\'on ne peut pas prévoir.'],[4.2,'Derrière lui, rien ne touche : bonne fenêtre de burst.']],
+ build(s){s.bm(.3,1.5,0,0,360);const bh=ring10(4.5,0).map(([x,z],i)=>pol(3.6+(i%3)*1.4,150+i*6));for(let i=0;i<10;i++)s.m(i,.4,1.6,bh[i][0],bh[i][1]);
+  s.tele('rect',{w:3,l:20,color:C.death,yaw:0},1.6,3,3);
+  const beam=new THREE.Mesh(new THREE.BoxGeometry(2.4,1.2,20).translate(0,1.2,10),new THREE.MeshBasicMaterial({color:0xb8ff7a,transparent:true,opacity:.6,depthWrite:false}));s.add(beam);
+  s.update(t=>{beam.visible=t>=3&&t<5;beam.rotation.y=Math.min(90,(t-3)*55)*deg;beam.material.opacity=.45+.2*Math.sin(t*20)})}});
+def({id:'klaw-poursuite',grp:'klaw',boss:'klawfly',gate:'Klawfly · attaque 5 (après 75 %)',name:'Poursuite',dur:9,arena:'circle',clip:'boss-1-attaque-enterre',
+ start:[pol(4,0),pol(8,70),pol(8,290),pol(5,120),pol(5,240),pol(6,40),pol(9,100),pol(9,260),pol(6,160),pol(6,200)],
+ steps:[[0,'Klawfly s\'enterre et poursuit un joueur (ici D3).'],[1,'D3 kite en cercle jusqu\'à ce qu\'il ressorte.'],[5,'D3 revient au centre pour replacer le boss.'],[6.6,'Il ressort avec une AoE devant ET derrière lui : restez sur les côtés.']],
+ build(s){const H=5;s.bossHide(t=>t>=.8&&t<6.6);s.icon(H,C.kd,.8,6.6,'CIBLE');
+  const way=[[9,5],[11,-3],[6,-9],[-2,-10],[-8,-5],[-6,3],[0,3.5]];let tt=.9;way.forEach(([x,z],k)=>{s.m(H,tt,tt+.8,x,z);tt+=.8});
+  s.bm(.9,6.5,0,3.5,0);s.update(t=>{const b=BOSSES.klawfly;if(t>=.8&&t<6.6){const q=s.pos(H,Math.max(0,t-.7));b.position.set(q.x,0,q.z)}});
+  const mound=new THREE.Mesh(new THREE.SphereGeometry(1.2,14,8,0,Math.PI*2,0,Math.PI/2),new THREE.MeshStandardMaterial({color:0x2a2030,roughness:.9}));s.add(mound);
+  s.update(t=>{mound.visible=t>=.8&&t<6.6;if(mound.visible){const q=s.pos(H,Math.max(0,t-.7));mound.position.set(q.x,0,q.z);mound.scale.y=.6+.2*Math.sin(t*12)}});
+  s.tele('rect',{w:4,l:10,color:C.death,yaw:0,at:[0,3.5]},6.6,7.6,7.6);s.tele('rect',{w:4,l:10,color:C.death,yaw:180,at:[0,3.5]},6.6,7.6,7.6);
+  s.m(H,6.4,6.9,4,3.5);[0,3,4,8,9].forEach(i=>{const q=s.pos(i,6.4);if(Math.abs(q.x)<2.5)s.m(i,6.4,6.9,q.x<0?-4:4,q.z)})}});
+def({id:'klaw-pierres',grp:'klaw',boss:'klawfly',gate:'Klawfly · ~80 % et ~20 %',name:'Les pierres',dur:13,arena:'circle',clip:'boss-1-mecanique-callioux',labels:['T','1','2','3','4','D1','D2','D3','D4','D5'],
+ start:ring10(6,18),
+ steps:[[0,'Klawfly invoque 4 pierres et numérote 4 joueurs (1 à 4).'],[.6,'Les joueurs 1, 2 et 3 vont chacun sur une pierre.'],[2.4,'Il saute sur les joueurs dans l\'ordre : chaque saut casse une pierre.'],[6.6,'Le 4 reste à l\'écart : une pierre doit rester en vie.'],[8.2,'AoE one-shot : tout le monde se cache derrière la dernière pierre.'],[10.2,'Sortez environ 1,5 s avant la fin du cast…'],[11.2,'…car la pierre explose et laisse une zone de poison pour le reste du combat.']],
+ build(s){const stones=[45,135,225,315].map(a=>pol(9.5,a));const meshes=stones.map(([x,z])=>{const m=new THREE.Mesh(new THREE.DodecahedronGeometry(1.4,0),new THREE.MeshStandardMaterial({color:0x5a5a52,roughness:.85,emissive:0x2a4a10,emissiveIntensity:.4}));m.position.set(x,1.1,z);m.castShadow=true;s.add(m);return m});
+  for(let k=1;k<=4;k++)s.icon(k,C.gold,.3,8,String(k));
+  const tgt=[stones[0],stones[1],stones[2],pol(10,270)];for(let k=0;k<4;k++){const [x,z]=tgt[k];s.m(k+1,.6,2,x*(k<3?.86:1),z*(k<3?.86:1))}
+  const land=[2.6,4,5.4,6.8];land.forEach((ts,k)=>{const [x,z]=tgt[k];const L=Math.hypot(x,z);s.tele('circle',{r:3,color:C.kd,at:[x*.86,z*.86]},ts-1.2,ts,ts);s.bm(ts-.7,ts,x*(L-1.6)/L,z*(L-1.6)/L,Math.atan2(x,z)/deg,1.2);if(k<3)s.hurt(k+1,ts)});
+  s.update(t=>meshes.forEach((m,k)=>{m.visible=k===3?t<11.2:t<land[k];m.rotation.y=t*.2}));
+  s.bm(7.3,8,0,0,0,1);const st=stones[3],L=Math.hypot(...st),u=[st[0]/L,st[1]/L];
+  s.tele('circle',{r:R,color:C.death},8.2,10.8,10.8);s.zone('rect',{w:2.6,l:6,color:C.safe,yaw:Math.atan2(u[0],u[1])/deg,at:[st[0]+u[0]*1.2,st[1]+u[1]*1.2],op:.55,y:.09},8.2,10.8);
+  for(let i=0;i<10;i++){const d=2.2+(i%4)*.9,lat=((i%3)-1)*.7;s.m(i,8.4,9.9,st[0]+u[0]*d-u[1]*lat,st[1]+u[1]*d+u[0]*lat)}
+  s.tele('circle',{r:3.4,color:POIS,at:st},10.6,11.2,11.2);s.zone('circle',{r:2.6,color:0x4a7a2a,at:st,op:.5},11.3,13);
+  for(let i=0;i<10;i++){const q=s.pos(i,10.2);s.m(i,10.4,11.1,q.x*.55,q.z*.55)}}});
+const KO=[[0,5.4],[-2.7,2.7],[-5.4,0],[-2.7,-2.7],[0,-5.4],[2.7,-2.7],[5.4,0],[2.7,2.7]];
+def({id:'klaw-orbes',grp:'klaw',boss:'klawfly',gate:'Klawfly · ~50 %',name:'Les orbes',dur:16,arena:'circle',clip:'boss-1-mecanique-orbes',labels:NUM,
+ start:[[0,2],...KO,[0,-2]],
+ steps:[[0,'Klawfly se téléporte au centre. Placement en losange, numéros 1 à 8 (marqueurs).'],[1,'Des orbes violettes apparaissent autour de lui et s\'éloignent lentement.'],[2.2,'Le 1 prend son orbe : toutes les autres passent en orange.'],[3,'On attend qu\'elles redeviennent violettes avant de prendre la suivante.'],[6,'Deux orbes prises en même temps = gros dégâts sur le raid.'],[12,'Une orbe qui touche le mur extérieur = WIPE. La pluie de poison continue : survivez d\'abord.']],
+ build(s){s.label('SPAWN',0,R+1.5,1,'#ff8d6b');const TK=KO.map((_,k)=>2.2+k*1.6);
+  const orbs=KO.map(([x,z],k)=>{const L=Math.hypot(x,z),u=[x/L,z/L],o=s.orb(0xa35cff,.55);return{o,u,r0:L+1.6,k}});
+  const rad=(o,t)=>o.r0+Math.max(0,t-1)*.45;
+  orbs.forEach(o=>{const ts=TK[o.k],r=rad(o,ts);s.m(o.k+1,ts-.7,ts,o.u[0]*r,o.u[1]*r);s.m(o.k+1,ts+.3,ts+1.1,KO[o.k][0],KO[o.k][1])});
+  s.update(t=>orbs.forEach(o=>{const r=rad(o,t);o.o.position.set(o.u[0]*r,1.2,o.u[1]*r);o.o.visible=t>=1&&t<TK[o.k];const orange=TK.some(tk=>t>=tk&&t<tk+1.1);o.o.children[0].material.color.setHex(orange?0xff9a2a:0xa35cff);o.o.children[1].material.color.setHex(orange?0xff9a2a:0xa35cff)}));
+  [[3,[7,9]],[5.5,[-9,-6]],[8,[3,-12]],[10.5,[-10,8]],[13,[11,-4]]].forEach(([ts,at])=>s.tele('circle',{r:1.6,color:POIS,at},ts,ts+1.2,ts+1.2));
+  s.gauge(t=>{const n=TK.filter(k=>t>=k).length;const orange=TK.some(tk=>t>=tk&&t<tk+1.1);return t<1?null:['Orbes prises '+n+'/8 · '+(orange?'ORANGE : attendez':'violettes : au suivant'),n/8,orange?'linear-gradient(90deg,#b4602a,#ff9a2a)':'linear-gradient(90deg,#5a2aa0,#a35cff)']})}});
+
+/* ---------- BLATT (arène ronde, placement en 4 duos) ---------- */
+const BP=[[0,3.6],[-8.5,7],[-6.7,7.9],[-8.3,-6.8],[-6.7,-8.2],[6.5,-8.2],[8,-6.7],[8.5,7],[6.6,8],[0,-3.6]];
+def({id:'blatt-charge',grp:'blatt',boss:'blatt',gate:'Blatt · attaque 1',name:'Charge + Cône',dur:7,arena:'circle',clip:'boss-2-attaque-dash-cone',labels:NUM,
+ start:BP,
+ steps:[[0,'Blatt vise un joueur (ici le 7) et charge.'],[.6,'Le chemin de la charge fait des dégâts : on s\'écarte.'],[1.6,'Les CàC peuvent bloquer pendant la charge.'],[2.6,'Il se retourne à 180° : large cône vers le centre.'],[3,'Sortez du cône sur les côtés.']],
+ build(s){const tg=[8.5,7];s.tele('rect',{w:4.5,l:10.6,color:C.kd,yaw:Math.atan2(tg[0],tg[1])/deg},.4,1.6,1.6);s.bm(1.6,2.2,6.9,5.7,Math.atan2(8.5,7)/deg);s.m(7,.6,1.4,11,4);s.m(8,.6,1.4,4.5,10.5);
+  s.bm(2.3,2.6,6.9,5.7,Math.atan2(-6.9,-5.7)/deg);s.tele('sector',{r:13,ang:100,color:C.death,at:[6.9,5.7],yaw:Math.atan2(-6.9,-5.7)/deg},2.6,4,4);
+  s.m(0,2.7,3.6,-3,7);s.m(9,2.7,3.6,4,-7);s.m(1,2.7,3.6,-9,11);s.m(2,2.7,3.6,-3,11)}});
+def({id:'blatt-zikel',grp:'blatt',boss:'blatt',gate:'Blatt · attaque 2',name:'Zikel',dur:7,arena:'circle',clip:'boss-2-attaque-zikel',labels:NUM,
+ start:[...BP.slice(0,9),pol(16.5,200)],
+ steps:[[0,'Blatt lève la main, aura violette.'],[.6,'Les joueurs à distance se rapprochent à moins de 15 m.'],[1,'3 lignes d\'attaque partent du boss.'],[2.6,'Entre 15 et 30 m, chacun génère une ligne en plus, dans l\'axe de son personnage.'],[3.4,'Ici D7 est resté trop loin : une ligne supplémentaire part sur lui.']],
+ build(s){const aura=s.glow(0xa35cff,8);aura.position.set(0,5,0);s.add(aura);s.update(t=>{aura.visible=t<3;aura.material.opacity=.4+.3*Math.sin(t*6)});
+  [20,140,260].forEach(y=>s.tele('rect',{w:2.6,l:18,color:C.void,yaw:y},1,2.4,2.4));
+  const d7=pol(16.5,200);s.tele('rect',{w:2.2,l:30,color:C.death,yaw:20,at:[d7[0]-Math.sin(20*deg)*15,d7[1]-Math.cos(20*deg)*15]},2.6,3.8,3.8);s.hurt(9,3.8);s.zone('ring',{r0:14.8,r1:15.2,color:C.kd,op:.5},.4,4.5)}});
+def({id:'blatt-yeux',grp:'blatt',boss:'blatt',gate:'Blatt · attaque 3',name:'Yeux rouges',dur:8,arena:'circle',clip:'boss-2-attaque-yeux',labels:NUM,
+ start:[pol(3.4,0),pol(3.6,40),pol(3.6,320),pol(4,80),pol(11,150),pol(11,200),pol(11,250),pol(4,280),pol(11,110),pol(11,180)],
+ steps:[[0,'Blatt charge son poing vers le sol.'],[.6,'Deux joueurs ont un œil rouge : un au CàC (le 3), un à distance (le 5).'],[1,'Les CàC se collent à l\'œil CàC et bloquent.'],[1.2,'L\'œil à distance recule loin des CàC pour ne pas cumuler.'],[3,'Après l\'impact, ces deux zones deviennent des safe zones…'],[4,'…pour l\'attaque suivante : tout le monde dedans.']],
+ build(s){s.icon(3,C.death,.6,3,'ŒIL');s.icon(5,C.death,.6,3,'ŒIL');s.m(5,1.2,2.6,...pol(15,200));
+  const ce=pol(4,80);[0,1,2,7].forEach((i,k)=>{s.m(i,1,2.2,ce[0]+OFF[k+1][0]*.8,ce[1]+OFF[k+1][1]*.8);s.shield(i,2.5,3.2)});
+  s.tele('circle',{r:3.2,color:C.death,at:t=>{const q=s.pos(3,Math.min(t,2.8));return[q.x,q.z]}},.8,3,3);s.tele('circle',{r:3.2,color:C.death,at:t=>{const q=s.pos(5,Math.min(t,2.8));return[q.x,q.z]}},.8,3,3);
+  const z1=pol(4,80),z2=pol(15,200);s.zone('circle',{r:3.2,color:C.safe,at:z1,op:.35},3,8);s.zone('circle',{r:3.2,color:C.safe,at:z2,op:.35},3,8);
+  [4,6,8,9].forEach((i,k)=>s.m(i,3.2,4.6,z2[0]+OFF[k][0]*.8,z2[1]+OFF[k][1]*.8));
+  s.tele('circle',{r:R,color:C.kd},4,6,6)}});
+def({id:'blatt-inout',grp:'blatt',boss:'blatt',gate:'Blatt · attaque 5 (après 75 %)',name:'In Out',dur:8,arena:'circle',clip:'boss-2-attaque-in-out',labels:NUM,
+ start:ring10(8.6,18).map((p,i)=>i?p:pol(8.6,0)),
+ steps:[[0,'4 cercles partent de loin et se rapprochent du boss.'],[1.4,'Touché = attrapé au CàC du boss.'],[3,'Attendez que le cercle juste à l\'extérieur de vous explose…'],[3.1,'…puis dashez dehors, là où c\'est déjà passé.'],[6,'À la fin, les joueurs au débuff violet déclenchent une météorite sur eux.']],
+ build(s){[[14,18],[10.4,14],[6.8,10.4],[3,6.8]].forEach(([a,b],k)=>s.tele('ring',{r0:a,r1:b,color:C.death},1.4+k*.9,3+k*.9,3+k*.9));
+  ring10(8.6,18).forEach((p,i)=>{const q=i?p:pol(8.6,0),L=Math.hypot(...q);s.m(i,4,4.4,q[0]/L*12.4,q[1]/L*12.4)});
+  [2,6,8].forEach(i=>{s.aura(i,C.void,1,6.5);s.tele('circle',{r:2.6,color:C.void,at:t=>{const q=s.pos(i,Math.min(t,6));return[q.x,q.z]}},5.4,6.6,6.6)})}});
+def({id:'blatt-tentacules',grp:'blatt',boss:'blatt',gate:'Blatt · ~75 % et ~20 %',name:'Tentacules',dur:13,arena:'circle',clip:'boss-2-mecanique-tentacules',labels:NUM,
+ start:BP,
+ steps:[[0,'Blatt revient au centre avec une attaque en croix.'],[1,'Tentacules rouges et violettes tout autour. Voiceline : « Red blood bursts forth… »'],[1.6,'Le PREMIER mot est une couleur : ROUGE. Retenez-le.'],[3.4,'Projectile sur tout le raid : esquivez (restez assez loin du boss).'],[4.2,'Chacun prend une tentacule ROUGE.'],[6.4,'AoE one-shot : les porteurs du rouge survivent.'],[7.6,'2e projectile, puis on prend les tentacules VIOLETTES restantes.'],[10.6,'2e AoE : survivants.']],
+ build(s){[0,90,180,270].forEach(y=>s.tele('rect',{w:3,l:14,color:C.kd,yaw:y},.2,.9,.9));
+  const vt=s.label('« RED blood… »',0,0,7.6,'#ff6a7a');vt.scale.set(4.2,1.6,1);s.update(t=>{vt.visible=t>=1&&t<4&&labelsOn});
+  const tents=[];BP.forEach(([x,z],i)=>{const L=Math.hypot(x,z)||1,u=[x/L,z/L],side=[-u[1],u[0]];tents.push({c:C.red,p:[x+side[0]*1.8,z+side[1]*1.8],i});tents.push({c:C.void,p:[x-side[0]*1.8,z-side[1]*1.8],i})});
+  tents.forEach(o=>{const g=new THREE.Group();for(let k=0;k<3;k++){const m=new THREE.Mesh(new THREE.ConeGeometry(.18,1.3+k*.3,6),new THREE.MeshStandardMaterial({color:o.c,emissive:o.c,emissiveIntensity:.6}));m.position.set((k-1)*.25,.6,(k%2)*.2);m.rotation.z=(k-1)*.25;g.add(m)}g.position.set(o.p[0],0,o.p[1]);s.add(g);o.g=g});
+  const pickR=4.8,pickV=8.6;
+  BP.forEach(([x,z],i)=>{const L=Math.hypot(x,z)||1,dx=-z/L*1.2,dz=x/L*1.2,r=tents.find(o=>o.i===i&&o.c===C.red),v=tents.find(o=>o.i===i&&o.c===C.void);
+   s.m(i,3.1,3.5,x+dx,z+dz);s.m(i,pickR-.4,pickR+.6,r.p[0],r.p[1]);s.aura(i,C.red,pickR+.6,pickV+.6);s.m(i,6.6,7.2,x,z);s.m(i,7.3,7.7,x+dx,z+dz);s.m(i,pickV-.4,pickV+.6,v.p[0],v.p[1]);s.aura(i,C.void,pickV+.6,13)});
+  s.update(t=>tents.forEach(o=>{const tp=o.c===C.red?pickR:pickV;o.g.visible=t>=1&&t<tp+.6;o.g.rotation.y=Math.sin(t*2+o.i)*.4}));
+  [3.4,7.6].forEach(ts=>{BP.forEach(([x,z],i)=>{const L=Math.hypot(x,z)||1;s.tele('rect',{w:1.4,l:L+2,color:C.void,yaw:Math.atan2(x,z)/deg},ts-.6,ts+.4,ts+.4)})});
+  s.tele('circle',{r:R,color:C.death},5,6.4,6.4);s.tele('circle',{r:R,color:C.death},9.2,10.6,10.6);
+  s.gauge(t=>t<1?null:t<7?['Couleur annoncée : ROUGE puis VIOLET',t<6.4?.5:1,'linear-gradient(90deg,#ff5a4a,#a35cff)']:['2e partie : tentacules VIOLETTES',1,'linear-gradient(90deg,#5a2aa0,#a35cff)'])}});
+const BZ=[[-7.5,7.5],[-7.5,-7.5],[7.5,-7.5],[7.5,7.5]];
+def({id:'blatt-zones',grp:'blatt',boss:'blatt',gate:'Blatt · ~50 %',name:'Zone bleue',dur:12,arena:'circle',clip:'boss-2-mecanique-zones-bleus',labels:NUM,
+ start:BP,
+ steps:[[0,'Blatt revient au centre (attaque en croix). Placement initial en 4 duos.'],[.6,'Zones bleues avec un monstre au milieu : chaque duo se met sur le bord extérieur de la sienne.'],[2,'L\'attaque du boss part : rentrez vers l\'intérieur pour esquiver.'],[3.6,'Un joueur se place devant le monstre pour absorber le projectile (celui qui a le moins de PV : il remonte full).'],[5.2,'Le boss cast son AoE : tapez le monstre, gardé bas (5-10 stacks)…'],[7.6,'…il doit mourir à 2 s ou moins de la fin du cast : invulnérabilité pendant l\'AoE.'],[10,'Cette séquence se fait 2 fois.']],
+ build(s){[0,90,180,270].forEach(y=>s.tele('rect',{w:3,l:14,color:C.kd,yaw:y},.1,.6,.6));
+  BZ.forEach(([x,z])=>{s.zone('circle',{r:4.2,color:0x4aa8ff,at:[x,z],op:.22},.6,10);const m=new THREE.Group();m.add(new THREE.Mesh(new THREE.SphereGeometry(.7,14,10),new THREE.MeshPhysicalMaterial({color:0x3a6a9a,clearcoat:1,roughness:.2,emissive:0x2a5aa0,emissiveIntensity:.5})),s.glow(0x6fc4ff,2.4));m.position.set(x,.8,z);s.add(m);s.update(t=>{m.visible=t<7.6;m.scale.setScalar(t>7?1+.3*Math.sin(t*20):1)})});
+  const pair=[[1,2],[3,4],[5,6],[7,8]];
+  pair.forEach(([a,b],k)=>{const [x,z]=BZ[k],L=Math.hypot(x,z),u=[x/L,z/L],side=[-u[1],u[0]];
+   [a,b].forEach((i,j)=>{const sg=j?1:-1;s.m(i,.6,1.8,x+u[0]*4.6+side[0]*sg*1,z+u[1]*4.6+side[1]*sg*1);s.m(i,2.1,2.7,x+u[0]*1.4+side[0]*sg*1.2,z+u[1]*1.4+side[1]*sg*1.2)});
+   s.m(b,3.4,3.9,x-u[0]*1.3,z-u[1]*1.3);
+   s.tele('ring',{r0:4.2,r1:6.4,color:C.death,at:[x,z]},1,2.8,2.8)});
+  BZ.forEach(([x,z])=>{const L=Math.hypot(x,z);s.tele('rect',{w:1.2,l:L-1.2,color:C.blue,yaw:Math.atan2(x,z)/deg},3.4,4.4,4.4)});
+  [0,9].forEach(i=>s.m(i,.6,1.8,i?-1.5:1.5,0));
+  for(let i=0;i<10;i++)s.shield(i,7.6,10.4);s.tele('circle',{r:R,color:C.death},5.2,9.6,9.6);
+  s.gauge(t=>t<5.2?null:t<9.6?['Cast de l\'AoE : '+(9.6-t).toFixed(1)+' s · tuer le monstre à ≤ 2 s',(t-5.2)/4.4,t>=7.6?'linear-gradient(90deg,#2a8f55,#3fd77a)':'']:['Invulnérables pendant l\'AoE',1,'linear-gradient(90deg,#2a8f55,#3fd77a)'])}});
+
+/* ---------- BARGOTT (arène quadrillée 5×5, plateforme en haut) ---------- */
+const CX=7.2,CZ=4,cell=(c,r)=>[(c-2)*CX,(r-2)*CZ];
+def({id:'barg-aoe',grp:'barg',boss:'bargott',gate:'Bargott · attaque 1',name:'AoE ×3',dur:7,arena:'rect',clip:'boss-3-attaque-1-aoe',
+ start:[[0,3],[-2.6,2],[2.6,2],[-3,-1],[3,-1],[0,-3],[-15,2],[15,2],[-15,-3],[15,-3]],
+ steps:[[0,'Bargott frappe 3 fois.'],[.5,'1re frappe : au corps à corps. Les CàC reculent un peu.'],[1.9,'2e frappe : CàC encore, mais plus large.'],[3.5,'3e frappe : à distance. Safe au CàC et très loin.'],[3.7,'Les CàC reviennent coller le boss.']],
+ build(s){s.tele('circle',{r:4,color:C.kd},.5,1.8,1.8);s.tele('circle',{r:7.5,color:C.kd},1.9,3.3,3.3);s.tele('ring',{r0:4,r1:13.5,color:C.death},3.5,5,5);
+  for(let i=0;i<6;i++){const q=[[0,3],[-2.6,2],[2.6,2],[-3,-1],[3,-1],[0,-3]][i],L=Math.hypot(...q);s.m(i,.55,1.2,q[0]/L*5.4,q[1]/L*5.4);s.m(i,1.95,2.8,q[0]/L*8.6,Math.max(-9,Math.min(9,q[1]/L*8.6)));s.m(i,3.6,4.5,q[0]/L*2.6,q[1]/L*2.6)}}});
+def({id:'barg-feu',grp:'barg',boss:'bargott',gate:'Bargott · attaque 2',name:'Zone de feu + Split Damage',dur:15,arena:'rect',clip:'boss-3-attaque-2-zone-de-feu-sink',diag:'feu',
+ start:[[0,3],[-3,2],[3,2],[-6,0],[6,0],[-9,4],[9,4],[-12,-2],[12,-2],[0,-4]],
+ steps:[[0,'Bargott se téléporte au centre et lance une vague de feu : sautez.'],[2.4,'Collez-vous au mur pour poser vos 3 zones de feu loin de l\'arène.'],[6.6,'Puis courez sur le boss au plus vite.'],[8.2,'Split Damage : 1re zone à gauche du boss (sa main droite)…'],[9.9,'…2e de l\'autre côté…'],[11.6,'…3e au centre. Un maximum de joueurs dedans pour partager les dégâts.'],[13.4,'La fois suivante, le Draupnir fait exploser les zones déjà posées : posez-les sur un autre bord.']],
+ build(s){s.btp(.2,0,0,0);s.wave([0,0],.9,7,{color:FIRE});
+  for(let i=0;i<10;i++){const x=-15+i*3.33;s.m(i,2.4,4,x,-9.2);for(let k=0;k<3;k++){const ts=4.2+k*.7,at=[x+(k-1)*.5,-9.2+((k%2)?.4:-.2)];s.tele('circle',{r:1.3,color:FIRE,at},ts-.6,ts,ts);s.zone('circle',{r:1.3,color:0xff5a1a,at,op:.55},ts,15)}}
+  const zs=[[-4.5,2.5],[4.5,2.5],[0,3.6]];zs.forEach(([x,z],k)=>{const a=8.2+k*1.7;s.tele('circle',{r:3.2,color:C.kd,at:[x,z]},a,a+1.5,a+1.5);for(let i=0;i<10;i++)s.m(i,a-.6+(k?0:-.6),a+.3,x+OFF[i][0]*.85,z+OFF[i][1]*.85)});
+  s.gauge(t=>t<4?null:['Zones de feu posées au mur : '+Math.min(30,Math.max(0,Math.floor((t-4)/.7)+1)*10)+'/30',Math.min(1,(t-3.6)/2),'linear-gradient(90deg,#a03a10,#ff7a20)'])}});
+def({id:'barg-roulades',grp:'barg',boss:'bargott',gate:'Bargott · attaque 3',name:'Roulades',dur:7,arena:'rect',clip:'boss-3-attaque-3-roulade',
+ start:[[0,3],[-3,2],[3,2],[-6,0],[5,-3],[-9,4],[9,4],[15,7],[-12,-2],[0,-4]],
+ steps:[[0,'1re roulade : vers le joueur le plus éloigné (D5).'],[1.2,'D5 sort de la trajectoire.'],[2.8,'2e roulade : vers le joueur le plus proche.'],[3.6,'Avec un bon timing, la roulade se bloque.'],[5,'Ensuite : trous noirs ou shotgun.']],
+ build(s){const far=[15,7];s.tele('rect',{w:4,l:Math.hypot(...far),color:C.kd,yaw:Math.atan2(...far)/deg},.4,1.8,1.8);s.m(7,1,1.6,15,1.5);s.bm(1.8,2.6,12.5,5.8,Math.atan2(...far)/deg);
+  const nr=[9,4],d=[nr[0]-12.5,nr[1]-5.8];s.tele('rect',{w:4,l:Math.hypot(...d)+1,color:C.kd,yaw:Math.atan2(...d)/deg,at:[12.5,5.8]},2.8,3.8,3.8);s.shield(6,3.5,4.4);s.bm(3.8,4.4,10,4.5,Math.atan2(...d)/deg);
+  s.update(t=>{const b=BOSSES.bargott.userData.body;if((t>1.8&&t<2.6)||(t>3.8&&t<4.4))b.rotation.x=(t*12)%(Math.PI*2)})}});
+def({id:'barg-laser',grp:'barg',boss:'bargott',gate:'Bargott · attaque 4',name:'Laser 180°',dur:7,arena:'rect',clip:'boss-3-attaque-4-laser',
+ start:[[0,3],[-3,2],[3,2],[-6,1],[6,1],[-9,4],[9,4],[-12,2],[12,2],[0,6]],
+ steps:[[0,'Bargott se tape le ventre plusieurs fois.'],[.4,'Tout le monde passe dans son dos.'],[1.8,'Le laser part d\'un côté…'],[2.6,'…et balaie 180° devant lui. Énormes dégâts.']],
+ build(s){s.update(t=>{const b=BOSSES.bargott.userData.body;if(t<1.8)b.position.y=Math.abs(Math.sin(t*9))*.15});for(let i=0;i<10;i++){const p=pol(3.4+(i%3)*1.5,150+i*6.5);s.m(i,.4,1.7,p[0],p[1])}
+  s.tele('rect',{w:3,l:18,color:C.death,yaw:-90},1.4,2.6,2.6);
+  const beam=new THREE.Mesh(new THREE.BoxGeometry(2.6,1.4,18).translate(0,2,9),new THREE.MeshBasicMaterial({color:0xffa040,transparent:true,opacity:.6,depthWrite:false}));s.add(beam);
+  s.update(t=>{beam.visible=t>=2.6&&t<4.8;beam.rotation.y=(-90+Math.min(180,(t-2.6)*85))*deg;beam.material.opacity=.45+.2*Math.sin(t*25)})}});
+def({id:'barg-blind',grp:'barg',boss:'bargott',gate:'Bargott · attaque 5',name:'Blind + Orbes',dur:8,arena:'rect',clip:'boss-3-attaque-5-blind-orbes',
+ start:[[0,3],[-3,2],[3,2],[-6,1],[6,1],[-9,4],[9,4],[-12,2],[12,2],[0,6]],
+ steps:[[0,'Le gantelet de Bargott prend une aura bleue.'],[.6,'Il saute et fait exploser une bombe aveuglante.'],[.8,'Tournez le dos à Bargott pour ne pas être aveuglé.'],[2.4,'Puis une volée d\'orbes : on court vers la gauche.'],[4.5,'L\'aveuglement est faible : on voit assez pour esquiver.']],
+ build(s){s.bm(.5,1.3,0,0,0,1.2);const fl=new THREE.Mesh(new THREE.SphereGeometry(1,18,14),new THREE.MeshBasicMaterial({color:0xdff2ff,transparent:true,opacity:.7,depthWrite:false}));s.add(fl);s.update(t=>{const u=(t-1.3)/.7;fl.visible=u>=0&&u<1;fl.scale.setScalar(1+u*16);fl.material.opacity=.7*(1-u)});
+  s.face((i,t,q)=>t>=.8&&t<2.2?Math.atan2(q.x,q.z):null);
+  const orbs=[];for(let k=0;k<26;k++){const a=(-60+k*5.5)*deg,o=s.orb(0x6fc4ff,.35);orbs.push([o,a,2.4+(k%5)*.12])}
+  s.update(t=>orbs.forEach(([o,a,ts])=>{const r=(t-ts)*9;o.visible=t>=ts&&r<22;o.position.set(Math.sin(a)*r,1,Math.cos(a)*r)}));
+  for(let i=0;i<10;i++){const q=s.pos(i,2.2);s.m(i,2.3,3.6,Math.max(-16,q.x-9),q.z)}}});
+const B148={1:[0,4],2:[0,0],3:[2,2],4:[2,4],5:[4,2],6:[2,0],7:[4,0],8:[4,4]};
+def({id:'barg-bombes',grp:'barg',boss:'bargott',gate:'Bargott · ~80 % et ~25 %',name:'Les bombes',dur:16,arena:'rect',clip:'boss-3-mecanic-1-bombes',labels:NUM,
+ start:[[0,3],[-3,2],[3,2],[-6,1],[6,1],[-9,4],[9,4],[-12,2],[12,2],[0,6]],
+ steps:[[0,'Bargott disparaît et revient au centre. Des bombes apparaissent un peu partout.'],[.6,'Tout le monde rush DEVANT le boss et lit son numéro (1 à 8).'],[1.8,'Chacun prend sa place : ici le placement 1-4-8.'],[4,'Bargott roule sur les joueurs dans l\'ordre des numéros…'],[5,'…et chaque roulade passe sur des bombes : elles sautent sans tuer personne.'],[13.2,'Toutes les bombes détruites. Les 6, 7, 8 peuvent taper un peu avant d\'aller en place.']],
+ build(s){s.label('PLATEFORME BOSS',0,-14,1.2,'#ff8d6b');s.label('SPAWN',0,12,1,'#ff8d6b');
+  const fr=stack(0,3.5,10);for(let i=0;i<10;i++)s.m(i,.6,1.6,fr[i][0],fr[i][1]);
+  for(let n=1;n<=8;n++){s.icon(n,C.gold,1.6,15,String(n));const [x,z]=cell(...B148[n]);s.m(n,2,3.6,x,z)}
+  s.m(0,2,3.6,-7.2,.6);s.m(9,2,3.6,-7.2,-.6);
+  const path=[[0,0],...[1,2,3,4,5,6,7,8].map(n=>cell(...B148[n]))];const T0=4,DT=1.15;
+  const bombs=[];for(let k=0;k<8;k++){const a=path[k],b=path[k+1],ts=T0+k*DT;bombs.push({p:[(a[0]+b[0])/2,(a[1]+b[1])/2],te:ts+.55},{p:[a[0]*.25+b[0]*.75,a[1]*.25+b[1]*.75],te:ts+.8});
+   const d=[b[0]-a[0],b[1]-a[1]];s.tele('rect',{w:3.6,l:Math.hypot(...d)-.6,color:C.kd,yaw:Math.atan2(...d)/deg,at:a},ts-.8,ts,ts);s.bm(ts,ts+.95,b[0],b[1],Math.atan2(...d)/deg);s.shield(k+1,ts+.8,ts+1.3)}
+  const bm=bombs.map(o=>{const g=new THREE.Group(),m=new THREE.Mesh(new THREE.SphereGeometry(.55,14,10),new THREE.MeshStandardMaterial({color:0x2a1a14,roughness:.4,metalness:.6,emissive:0xff3a1a,emissiveIntensity:.5}));m.position.y=.55;g.add(m,s.glow(0xff5a2a,1.6));g.children[1].position.y=.8;g.position.set(o.p[0],0,o.p[1]);s.add(g);const ex=s.glow(0xffa040,6);ex.position.set(o.p[0],1,o.p[1]);s.add(ex);o.g=g;o.ex=ex;return o});
+  s.update(t=>{bm.forEach(o=>{o.g.visible=t>=.4&&t<o.te;const u=(t-o.te)/.5;o.ex.visible=u>=0&&u<1;o.ex.scale.setScalar(2+u*6);o.ex.material.opacity=1-u});const b=BOSSES.bargott.userData.body;const k=Math.floor((t-T0)/DT),f=(t-T0)-k*DT;if(k>=0&&k<8&&f<.95)b.rotation.x=(t*12)%(Math.PI*2)});
+  s.bossHide(t=>t>=.2&&t<.9);
+  s.gauge(t=>{const n=bm.filter(o=>t>=o.te).length;return t<1?null:['Bombes détruites '+n+'/'+bm.length,n/bm.length,'linear-gradient(90deg,#a03a10,#ff7a20)']})}});
+def({id:'barg-plateforme',grp:'barg',boss:'bargott',gate:'Bargott · ~50 %',name:'La plateforme',dur:18,arena:'rect',clip:'boss-3-mecanique-2-50',
+ start:[[0,3],[-3,2],[3,2],[-6,1],[6,1],[-9,4],[9,4],[-12,2],[12,2],[0,6]],bossStart:{x:0,z:0,yaw:0},
+ steps:[[0,'Bargott se téléporte sur la plateforme derrière l\'arène.'],[1,'Il attire tout le raid vers lui, puis tire des shotguns en continu.'],[2.4,'Des bombes sont posées au hasard : ramassez-en une (touche action).'],[4,'Revenez au bord de l\'arène, ciblez Bargott et lancez-lui la bombe.'],[6,'Les Clercs restent près du bord pour dissiper les brûlures, les DPS vont chercher les bombes les plus loin.'],[12,'Il en faut 8. Les marteaux tombent toujours : la survie d\'abord.']],
+ build(s){s.btp(.6,0,-14.5,0);s.update(t=>{if(t>=.6)BOSSES.bargott.position.y=1.6});
+  for(let i=0;i<10;i++)s.m(i,1,1.8,(i-4.5)*1.6,-8.6);
+  const picks=[[-14,7],[14,6],[-9,-2],[9,-3],[-3,8],[4,8],[-15,-5],[15,-6]],run=[3,4,5,6,7,8,9,0];
+  const thr=[];picks.forEach((p,k)=>{const i=run[k],ts=2.4+k*1.2;s.m(i,ts,ts+1.4,p[0],p[1]);s.m(i,ts+1.8,ts+3.2,p[0]*.4,-8.8);thr.push(ts+3.3);
+   const b=new THREE.Mesh(new THREE.SphereGeometry(.45,12,10),new THREE.MeshStandardMaterial({color:0x2a1a14,emissive:0xff3a1a,emissiveIntensity:.7}));s.add(b);
+   s.update(t=>{const tt=thr[k];if(t<ts+1.4){b.visible=t>=.8;b.position.set(p[0],.45,p[1])}else if(t<tt){const q=s.pos(i,t);b.visible=true;b.position.set(q.x,2.2,q.z)}else{const u=(t-tt)/.8;b.visible=u<1;const q=s.pos(i,tt);b.position.set(q.x+(0-q.x)*u,2.2+Math.sin(Math.PI*u)*4,q.z+(-14.5-q.z)*u)}})});
+  [1,2].forEach(i=>s.m(i,2,3,(i==1?-3:3),-8.4));
+  for(let k=0;k<7;k++){const ts=2+k*2.1,y=(k%3-1)*25;s.tele('sector',{r:16,ang:24,color:C.death,yaw:y,at:[0,-13]},ts,ts+1,ts+1)}
+  [[2.5,1,1],[4,3,3],[5.5,0,3],[7,4,1],[8.5,2,4],[10,1,3],[11.5,3,0],[13,0,1],[14.5,4,4]].forEach(([ts,c,r])=>s.tele('box',{w:CX-.4,d:CZ-.4,color:C.kd,at:cell(c,r)},ts,ts+1.1,ts+1.1));
+  s.gauge(t=>{const n=thr.filter(x=>t>=x+.8).length;return t<2?null:['Bombes lancées sur Bargott '+n+'/8',n/8,'linear-gradient(90deg,#a03a10,#ff7a20)']})}});
+
+/* ===== UI wiring ===== */
+const scrub=$('#scrub'),tLbl=$('#tLbl'),playBtn=$('#play'),cmp=$('#cmp'),cmpVid=$('#cmpVid');
+const groups=[['klaw','Devouring Klawfly'],['blatt','Black Blood Blatt'],['barg','Terminator Bargott']];
+$('#chipGroup').innerHTML=groups.map(([b,l])=>`<div class="chips" data-b="${b}"><h4>${l}</h4>${SC.filter(s=>s.grp===b).map(s=>`<button class="chip" type="button" data-id="${s.id}">${s.name}</button>`).join('')}</div>`).join('');
+const chips=[...document.querySelectorAll('.chip')];
+function setCmp(){if(cmp.hidden)return;if(cur.clip){const src=M(cur.clip);if(!cmpVid.src.endsWith(src)){cmpVid.src=src;cmpVid.play().catch(()=>{})}}else{cmp.hidden=true}}
+function select(id,{scroll=false,push=true}={}){
+ const sc=SC.find(s=>s.id===id)||SC[0];
+ clearDyn();Object.values(BOSSES).forEach(b=>{b.visible=false;b.position.set(0,0,0);b.userData.body.position.y=0});
+[...P10,...P5].forEach(p=>p.visible=false);
+ floorC.visible=sc.arena==='circle';floorS.visible=sc.arena==='square';floorG.visible=sc.arena==='rect';
+ cur=sc;S=makeS(sc);S.boss.visible=true;
+ const party=S.party,base=sc.party===5?ROLES5:ROLES10;party.forEach((p,i)=>{p.visible=true;p.userData.lbl.setText((sc.labels||[])[i]||base[i][1],sc.labels&&sc.labels[i][0]==='B'?'#d4a85a':undefined)});
+ time=0;capIdx=-1;playing=true;playBtn.textContent='❚❚ Pause';
+ $('#simGate').textContent=sc.gate;$('#simName').textContent=sc.name;
+ stepsEl.innerHTML=sc.steps.map(([t,x])=>`<li data-t="${t}"><span class="num">${t.toFixed(1)} s</span><span>${x}</span></li>`).join('');
+ chips.forEach(c=>c.classList.toggle('on',c.dataset.id===sc.id));
+ $('#btnCmp').disabled=!sc.clip;$('#btnCmp').style.opacity=sc.clip?'':'.5';setCmp();
+ if(push){try{history.replaceState(null,'','#sim-'+sc.id)}catch(e){}}
+ if(scroll)$('#arena-sec').scrollIntoView({behavior:RM?'auto':'smooth'});
+ applyFrame(0)}
+chips.forEach(c=>c.addEventListener('click',()=>select(c.dataset.id)));
+document.addEventListener('click',e=>{const b=e.target.closest('[data-sim]');if(b)select(b.dataset.sim,{scroll:true})});
+stepsEl.addEventListener('click',e=>{const li=e.target.closest('li');if(li){time=+li.dataset.t;applyFrame(time)}});
+playBtn.addEventListener('click',()=>{if(time>=cur.dur)time=0;playing=!playing;playBtn.textContent=playing?'❚❚ Pause':'▶ Lecture'});
+$('#restart').addEventListener('click',()=>{time=0;playing=true;playBtn.textContent='❚❚ Pause'});
+scrub.addEventListener('input',()=>{time=scrub.value/1000*cur.dur;playing=false;playBtn.textContent='▶ Lecture';applyFrame(time)});
+$('#speed').addEventListener('change',e=>speed=+e.target.value);
+$('#tglLabels').addEventListener('change',e=>{labelsOn=e.target.checked});
+$('#btnCmp').addEventListener('click',()=>{if(!cur.clip)return;cmp.hidden=!cmp.hidden;if(cmp.hidden)cmpVid.pause();else{cmpVid.removeAttribute('src');setCmp()}});
+$('#cmpClose').addEventListener('click',()=>{cmp.hidden=true;cmpVid.pause()});
+$('#btnFull').addEventListener('click',()=>{const st=$('#stage');try{document.fullscreenElement?document.exitFullscreen():st.requestFullscreen().catch(()=>{})}catch(e){}});
+addEventListener('keydown',e=>{if(e.target.matches('input,select,textarea'))return;const r=$('#stage').getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;
+ if(e.code==='Space'&&!e.target.classList.contains('clip')){e.preventDefault();playBtn.click()}else if(e.key==='ArrowRight'){time=Math.min(cur.dur,time+.5);applyFrame(time)}else if(e.key==='ArrowLeft'){time=Math.max(0,time-.5);applyFrame(time)}
+ else if(e.key===']'||e.key==='['){const i=SC.indexOf(cur);select(SC[(i+(e.key===']'?1:-1)+SC.length)%SC.length].id)}});
+const CAMS={orbit:[14,30,30],top:[0,44,.01],low:[0,12,34]};let camAnim=null;
+const camTgt=new THREE.Vector3();
+function setCam(k,inst){let to,tg=new THREE.Vector3();if(k==='party'){const c=new THREE.Vector3();S.party.forEach(p=>c.add(p.position));c.divideScalar(S.party.length);c.y=0;tg.set(c.x,1.1,c.z);const bp=S.boss.position,a=Math.atan2(c.x-bp.x,c.z-bp.z)+.5;to=new THREE.Vector3(c.x+Math.sin(a)*7.5,4.2,c.z+Math.cos(a)*7.5)}else if(k==='boss'){const b=S.boss,p=b.position,y=b.rotation.y,bc=BCAM[cur.boss];tg.set(p.x,p.y+bc[2],p.z);const d=bc[0];to=new THREE.Vector3(p.x+Math.sin(y+.65)*d,p.y+bc[1],p.z+Math.cos(y+.65)*d)}else to=new THREE.Vector3(...CAMS[k]);if(inst){camera.position.copy(to);controls.target.copy(tg);return}camAnim={from:camera.position.clone(),to,t:0,tf:controls.target.clone(),tt:tg}}
+document.querySelectorAll('[data-cam]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-cam]').forEach(x=>x.classList.toggle('on',x===b));setCam(b.dataset.cam)}));setCam('orbit',true);
+function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w<560?62:45;camera.updateProjectionMatrix()}
+new ResizeObserver(resize).observe(canvas);resize();
+let vis=true;new IntersectionObserver(e=>{vis=e[0].isIntersecting},{rootMargin:'100px'}).observe(canvas);
+let last=performance.now();
+function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;
+ if(vis){if(playing){time+=dt*speed;if(time>=cur.dur+1.2)time=0}const t=Math.min(time,cur.dur);applyFrame(t);
+  Object.values(BOSSES).forEach(b=>b.visible&&b.userData.tick(now/1000));scrub.value=Math.round(t/cur.dur*1000);tLbl.textContent=t.toFixed(1)+' s';
+  if(camAnim){camAnim.t=Math.min(1,camAnim.t+dt*2);camera.position.lerpVectors(camAnim.from,camAnim.to,ss(camAnim.t));controls.target.lerpVectors(camAnim.tf,camAnim.tt,ss(camAnim.t));if(camAnim.t>=1)camAnim=null}
+  controls.update();renderer.render(scene,camera)}
+ requestAnimationFrame(loop)}
+const h0=(location.hash||'').replace('#sim-','');
+select(SC.some(s=>s.id===h0)?h0:'barg-bombes',{push:false});
+if(SC.some(s=>s.id===h0))setTimeout(()=>$('#arena-sec').scrollIntoView(),50);
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
